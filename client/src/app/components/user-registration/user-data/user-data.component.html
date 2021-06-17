@@ -1,0 +1,32 @@
+<form [formGroup]="userFormGroup">
+  <div [formGroupName]="'user'">
+    <fieldset>
+      <legend>User data</legend>
+      <div>
+        <div class="form__group">
+          <input type="text"
+                 class="form__field"
+                 placeholder="Name"
+                 name="username"
+                 id='username'
+                 [formControlName]="'username'"
+                 required
+                 style="width: 200%" autocomplete="off"/>
+          <label for="username" class="form__label">Name</label>
+        </div>
+
+        <div class="form__group">
+          <input type="password"
+                 class="form__field"
+                 placeholder="Password"
+                 name="password"
+                 id='password'
+                 [formControlName]="'password'"
+                 required
+                 style="width: 200%"/>
+          <label for="password" class="form__label">Password</label>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+</form>

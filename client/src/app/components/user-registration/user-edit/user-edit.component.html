@@ -1,0 +1,22 @@
+<form [formGroup]="formGroup" (ngSubmit)="submit()">
+
+  <div [ngSwitch]="stateFromDialog">
+
+    <div *ngSwitchCase="state.LOG_IN">
+      <app-user-data [userFormGroup]="formGroup"></app-user-data>
+    </div>
+
+    <div *ngSwitchCase="state.REGISTER">
+      <app-user-data [userFormGroup]="formGroup"></app-user-data>
+      <br>
+      <app-preferences [preferencesFormGroup]="formGroup"></app-preferences>
+    </div>
+
+    <div *ngSwitchCase="state.PREFERENCES">
+      <app-preferences [preferencesFormGroup]="formGroup"></app-preferences>
+    </div>
+
+  </div>
+
+    <button pButton pRipple type="submit" label="Submit" class="p-button-raised p-button-success p-button-text p-component p-ripple p-button"></button>
+</form>

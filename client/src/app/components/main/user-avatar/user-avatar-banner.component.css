@@ -1,0 +1,22 @@
+.avatar-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  width: 3.5em;
+  height: 3.5em;
+  background-color: var(--avatar-background);
+  border-radius: 50%;
+  border: var(--avatar-border);
+}
+
+::ng-deep .p-button:enabled:hover{
+  background-color: var(--avatar-hover-background);
+  transition: .25s ease-in-out;
+  border: var(--avatar-border);
+}
+
+.user-avatar-img{
+  height: -webkit-fill-available;
+}

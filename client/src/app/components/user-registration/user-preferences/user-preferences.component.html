@@ -1,0 +1,92 @@
+<form [formGroup]="preferencesFormGroup">
+  <div [formGroupName]="'preferences'">
+    <fieldset>
+      <legend>Preferences</legend>
+
+      <div class="header-buttons">
+        <p-selectButton [options]="drinkTypes"
+                        [(ngModel)]="selectedDrinkType"
+                        optionLabel="name"
+                        [optionValue]="0"
+                        [formControlName]="'drink_type'">
+          <ng-template let-item>
+            <img alt="drinkTypeIcon" [src]="item.icon" width="30px" height="30px">
+          </ng-template>
+        </p-selectButton>
+
+        <div class="avatar" (click)="openAvatarEdit()">
+          <img class="avatar-img" alt="avatar" [src]="tempAvatarSrc ? tempAvatarSrc : avatarSrc">
+        </div>
+      </div>
+
+      <div>
+
+        <div [ngSwitch]="selectedDrinkType.type">
+
+          <div *ngSwitchCase="drinkTypeEnum.COFFEE">
+            <div class="form__group">
+              <input type="number"
+                     step="0.5"
+                     min="0"
+                     max="10"
+                     class="form__field"
+                     placeholder="Amount"
+                     name="coffee"
+                     id='coffee'
+                     [formControlName]="'coffee'"/>
+              <label for="coffee" class="form__label">Coffee</label>
+            </div>
+          </div>
+
+          <div *ngSwitchCase="drinkTypeEnum.TEA">
+            <div class="form__group">
+              <input type="text"
+                     class="form__field"
+                     placeholder="Type"
+                     name="tea"
+                     id='tea'
+                     [formControlName]="'tea'"/>
+              <label for="tea" class="form__label">Tea</label>
+            </div>
+          </div>
+
+          <div class="form__group">
+            <input type="number"
+                   step="0.5"
+                   min="0"
+                   max="10"
+                   class="form__field"
+                   placeholder="Amount"
+                   name="sugar"
+                   id='sugar'
+                   [formControlName]="'sugar'"/>
+            <label for="sugar" class="form__label">Sugar</label>
+          </div>
+
+          <div *ngSwitchCase="drinkTypeEnum.COFFEE" class="form__group" style="width: 35%">
+            <input type="text"
+                   class="form__field"
+                   placeholder="Type"
+                   name="milk"
+                   id='milk'
+                   [formControlName]="'milk'"/>
+            <label for="milk" class="form__label">Milk</label>
+          </div>
+
+          <div class="form__group">
+        <textarea [rows]="5"
+                  [cols]="30"
+                  pInputTextarea
+                  [formControlName]="'note'"
+                  autoResize="autoResize"
+                  class="p-inputtext p-inputtextarea-resizable"
+                  style="min-height: 124px; min-width: 260px"
+                  id="note"
+                  placeholder="Note">
+        </textarea>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+</form>

@@ -1,0 +1,8 @@
+.header{
+  height: 15%;
+  border-bottom: var(--header-border);
+}
+
+.outlet{
+  height: 85%;
+}

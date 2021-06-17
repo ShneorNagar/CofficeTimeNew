@@ -1,0 +1,5 @@
+<div class="grid-container">
+  <div class="grid-item" (click)="setAvatar($event)" *ngFor="let avatar of avatars; index as i">
+    <img class="avatar-img" [src]="avatar" [alt]="'avatar' + i">
+  </div>
+</div>

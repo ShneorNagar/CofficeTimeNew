@@ -1,0 +1,174 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.app-container{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-item{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/**main button**/
+.flip-btn-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flip-btn-inner.flip-btn-front-btn .flip-btn-front{
+  box-shadow: var(--main-button-shadow);
+  border-right: var(--main-button-border);
+  border-left: var(--main-button-border);
+  border-bottom: var(--main-button-border);
+  outline:none;
+  border-radius: 40px;
+}
+
+.btn-shape{
+  border-radius: 40px;
+  width: 225px;
+  height: 150px;
+  perspective: 1000px;
+}
+
+.flip-btn-inner.flip-btn-front-btn:active .flip-btn-front{
+  box-shadow: none;
+  border-top: 6px solid #585858;
+  border-bottom: none;
+  transition: .05s ease-in-out;
+}
+/*.flip-card:hover .flip-card-inner {*/
+/*  transform: rotateY(180deg);*/
+/*}*/
+
+/* .flip-card:hover {
+  animation-name: vibrate;
+  animation-duration: .5s;
+} */
+
+.flip-btn-front, .flip-btn-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.flip-btn-front {
+  background-color:#f4f5f6;
+  color: black;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.flip-btn-back {
+  background-color:#f4f5f6;
+  color: white;
+  transform: rotateY(180deg);
+  border-top: 4px solid #585858;
+}
+
+.btn-img {
+  width: 120px;
+  height: 120px;
+}
+
+/**Video**/
+
+#backgroundVideo {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  z-index: -1000;
+}
+
+/**Coffee facts**/
+.facts-container{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 35%;
+  height: 30%;
+  direction: rtl;
+  background-color: rgba(59, 54, 52, 0.21);
+}
+
+.facts-header{
+  position: absolute;
+  top: -20%;
+  font-size: 35px;
+  margin-right:3%;
+}
+
+.facts-header span{
+  color: white;
+}
+
+.facts-header img{
+  height: 35px;
+  width: 35px;
+}
+
+.facts-text{
+  color: white;
+  padding-right: 3%;
+}
+
+.facts-title{
+  font-size: larger;
+}
+
+.facts-body{
+
+}
+/**Made with**/
+.made-with{
+  position: absolute;
+  bottom: 2%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.made-with *{
+  margin-left: .3%;
+  margin-right: .3%;
+}
+
+.made-with a{
+  color: inherit;
+}
+
+.made-with-img{
+  width: 25px;
+  height: 25px;
+}
+
+/**Key frames**/
+@keyframes vibrate {
+  20%   {transform: translate(15px);}
+  40%  {transform: translate(-15px);}
+  60%  {transform: translate(10px);}
+  80% {transform: translate(-10px);}
+  100% {transform: translate(0px);}
+}

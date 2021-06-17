@@ -1,0 +1,58 @@
+.header-container{
+  height: 100%;
+  background-color: #00000059;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.buttons-container{
+  display: flex;
+}
+
+.header-button{
+  width: 4em!important;
+  margin: .3em;
+}
+
+.header-button:hover{
+  height: 2.5em!important;
+}
+
+.logo-container{
+  position: absolute;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  top:1%;
+}
+
+.btn-word-img{
+  width: 20px;
+  height: 15px;
+}
+
+.flex-center{
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+#redDot{
+  background-color: red;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  left: 50%;
+  top: 20%;
+  border-radius: 50%;
+}
+
+.show{
+  visibility: visible;
+}
+
+.hide{
+  visibility: hidden;
+}

@@ -1,0 +1,22 @@
+.avatar-img{
+  width: 5em;
+  height: 5em;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  padding: 10px;
+}
+
+.grid-item {
+  padding: 20px;
+  text-align: center;
+  border-radius: 20%;
+}
+
+.grid-item:hover{
+  background-color: var(--avatar-hover-background);
+  transition: 0.25s ease-in-out;
+  cursor: pointer;
+}

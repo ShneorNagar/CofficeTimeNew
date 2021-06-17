@@ -1,0 +1,19 @@
+.push-button-sm{
+  width: 100px;
+  height: 50px;
+  perspective: 1000px;
+
+  box-shadow: var(--header-button-shadow);
+  border-right: var(--header-button-border);
+  border-left: var(--header-button-border);
+  border-bottom: var(--header-button-border);
+  outline:none;
+  border-radius: 15px;
+}
+
+.push-button-sm:active{
+  box-shadow: none;
+  border-top: var(--main-button-border);
+  border-bottom: none;
+  transition: .05s ease-in-out;
+}
