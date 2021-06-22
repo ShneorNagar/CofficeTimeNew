@@ -5,6 +5,7 @@ import {UserState} from "../../../shared/user.state";
 import {UserEditComponent} from "../../user-registration/user-edit/user-edit.component";
 import {UserService} from "../../user-registration/user.service";
 import {LocalUserService} from "../../../services/local-storage/local-user.service";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-header',
@@ -21,7 +22,9 @@ export class HeaderComponent implements OnInit {
   constructor(private primengConfig: PrimeNGConfig,
               public dialogService: DialogService,
               private userService: UserService,
-              private localUserService: LocalUserService) {
+              private localUserService: LocalUserService,
+              private router: Router,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -52,5 +55,9 @@ export class HeaderComponent implements OnInit {
 
   logOut() {
     this.localUserService.removeUser();
+  }
+
+  navigateToHome() {
+    this.router.navigate(['main'], {relativeTo: this.route})
   }
 }

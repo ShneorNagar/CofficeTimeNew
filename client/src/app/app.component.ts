@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {PushNotificationsService} from "./services/push/push-notifications.service";
+import {ConfigService} from "./services/config.service";
+import {LocalUserService} from "./services/local-storage/local-user.service";
 
 
 @Component({
@@ -10,11 +12,15 @@ import {PushNotificationsService} from "./services/push/push-notifications.servi
 export class AppComponent implements OnInit{
   title = 'CofficeTime';
 
-  constructor(private pushService: PushNotificationsService) {
+  constructor(private pushService: PushNotificationsService,
+              private configService: ConfigService,
+              private localUserService: LocalUserService) {
 
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.configService.loadAvatars();
     this.pushService.subscribeToNotifications();
+    this.localUserService.refresh();
   }
 }

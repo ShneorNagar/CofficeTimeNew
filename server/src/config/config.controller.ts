@@ -16,14 +16,17 @@ export class ConfigController {
     @Get('avatars')
     async getAvatars(): Promise<HttpResponse> {
 
-        let avatars: any[] = [];
+        let avatars: {fileName: string, content: string }[] = [];
         this.fsReader = new FileSystemReader(this.AVATARS_PATH);
 
         try {
             const filenames = await this.fsReader.list();
             for (let filename of filenames) {
                 let avatarBase64 = fs.readFileSync(`${this.AVATARS_PATH}\\${filename}`, 'base64');
-                avatars.push(`data:image/png;base64,${avatarBase64}`);
+                avatars.push({
+                    fileName: filename,
+                    content: `data:image/png;base64,${avatarBase64}`
+                });
             }
         } catch (err) {
             return err;

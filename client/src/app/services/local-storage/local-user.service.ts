@@ -1,9 +1,13 @@
 import {Injectable} from "@angular/core";
 import {UserDTO, UserEntity} from "../../shared/entities/user-entity";
 import {Subject} from "rxjs";
+import {ConfigService} from "../config.service";
 
 @Injectable({providedIn: "root"})
 export class LocalUserService {
+
+  constructor(private configService: ConfigService) {
+  }
 
   private USER_KEY = 'CTUser';
   userSub: Subject<UserEntity> = new Subject<UserEntity>();
@@ -22,11 +26,28 @@ export class LocalUserService {
     this.submitUser()
   }
 
+  public isUserLoggedIn(): boolean{
+    return (!!this.getUser());
+  }
+
+  refresh(){
+    this.submitUser();
+  }
+
   private submitUser(){
     this.userSub.next(JSON.parse(localStorage.getItem(this.USER_KEY)));
   }
 
-  public isUserLoggedIn(): boolean{
-    return (!!this.getUser());
+  public setAvatar(avatar: string){
+    if (this.isUserLoggedIn()){
+      this.getUser().preferences.avatar = avatar ?? this.configService.AVATARS.default;
+    }
+    this.submitUser();
+  }
+
+  public getAvatar(): string{
+    if (this.isUserLoggedIn()){
+      return this.getUser().preferences.avatar ?? this.configService.AVATARS.default
+    }
   }
 }

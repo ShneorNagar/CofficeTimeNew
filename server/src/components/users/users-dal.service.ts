@@ -64,9 +64,12 @@ export class UsersDalService {
             },
             preferences: {
                 coffee: row['coffee'],
+                tea: row['tea'],
                 sugar: row['sugar'],
                 milk: row['milk'],
-                note: row['note']
+                note: row['note'],
+                drink_type: row['drink_type'],
+                avatar: row['avatar']
             }
         } as UserEntity
     }

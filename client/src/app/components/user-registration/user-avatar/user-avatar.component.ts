@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {ConfigService} from "../../../services/config.service";
 import {DynamicDialogRef} from "primeng/dynamicdialog";
+import {ConfigService} from "../../../services/config.service";
 
 @Component({
   selector: 'app-user-avatar-edit',
@@ -9,28 +9,22 @@ import {DynamicDialogRef} from "primeng/dynamicdialog";
 })
 export class UserAvatarComponent implements OnInit {
 
-  avatars: any[];
+  avatars: any[] = [];
+  defaultAvatar: string;
 
   constructor(private configService: ConfigService,
-              public ref: DynamicDialogRef) { }
+              public ref: DynamicDialogRef) {
+  }
 
   ngOnInit(): void {
-    this.configService.getAvatars()
-      .then(res =>{
-        this.avatars = res.value;
-      })
-      .catch(err =>{
-        console.log(err);
-      });
+    this.avatars = this.configService.AVATARS.all;
+    this.defaultAvatar = this.configService.AVATARS.default;
   }
 
   setAvatar($event: MouseEvent) {
     const selectedAvatar = $event.target['currentSrc'];
-
-    if (selectedAvatar){
-      this.ref.close({
-        avatar: selectedAvatar
-      });
-    }
+    this.ref.close({
+      avatar: selectedAvatar ?? this.defaultAvatar
+    });
   }
 }

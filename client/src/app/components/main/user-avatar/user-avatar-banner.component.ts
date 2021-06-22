@@ -6,6 +6,7 @@ import {UserEditComponent} from "../../user-registration/user-edit/user-edit.com
 import {DialogService} from "primeng/dynamicdialog";
 import {UserService} from "../../user-registration/user.service";
 import {UserEntity} from "../../../shared/entities/user-entity";
+import {ConfigService} from "../../../services/config.service";
 
 @Component({
   selector: 'app-user-avatar',
@@ -24,10 +25,14 @@ export class UserAvatarBannerComponent implements OnInit {
 
   constructor(private localUserService: LocalUserService,
               public dialogService: DialogService,
-              private userService: UserService,) {
+              private userService: UserService,
+              private configService: ConfigService) {
     this.user = this.localUserService.getUser();
-    this.localUserService.userSub.subscribe((localUser: UserEntity) => {
-      this.avatar = localUser.preferences.avatar;
+    this.localUserService.userSub.subscribe((user) => {
+      if (user && (!!user.preferences?.avatar)){
+        this.avatar = user.preferences.avatar;
+      }
+      this.avatar = this.configService.AVATARS.default;
     })
   }
 
@@ -44,7 +49,7 @@ export class UserAvatarBannerComponent implements OnInit {
         command: () => this.openUserData(UserState.PREFERENCES)
       }]
     }]
-    this.avatar = this.user.preferences.avatar;
+    this.avatar = this.localUserService.getAvatar() ?? this.configService.AVATARS.default;
   }
 
   openUserData(state: UserState) {
