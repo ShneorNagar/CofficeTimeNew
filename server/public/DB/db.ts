@@ -1,11 +1,13 @@
 import * as sqlite3 from 'sqlite-async';
-import {Injectable} from "@nestjs/common";
+import {Injectable, Logger} from "@nestjs/common";
 
 @Injectable()
 export class Sqlite {
 
     private readonly sqlite;
     private database;
+    private context = Sqlite.name;
+    private logger = new Logger(this.context);
 
     get db() {
         return this.database;
@@ -16,10 +18,8 @@ export class Sqlite {
 
             this.database = sqlite;
 
-            console.log('sqlite start to run scripts...')
-
             let sql_create_user = `CREATE TABLE IF NOT EXISTS USER 
-                                   (user_id VARCHAR PRIMARY KEY, username VARCHAR NOT NULL, password VARCHAR NOT NULL);`;
+                                   (user_id VARCHAR PRIMARY KEY, username VARCHAR NOT NULL UNIQUE, password VARCHAR NOT NULL);`;
 
             let sql_create_user_preferences = `CREATE TABLE IF NOT EXISTS PREFERENCES (coffee INTEGER, tea VARCHAR, sugar INTEGER,
                                         milk VARCHAR, note VARCHAR, drink_type VARCHAR, avatar TEXT, user_id VARCHAR, 
@@ -36,22 +36,24 @@ export class Sqlite {
 
             let sql_create_config = `CREATE TABLE IF NOT EXISTS CONFIG (PUSH_PUBLIC_KEY TEXT, PUSH_PRIVATE_KEY TEXT, ORDER_TIMEOUT INTEGER);`;
 
-            console.log('sqlite: executing sql_create_user');
+            this.logger.log('sqlite start to run scripts...', this.context);
+
+            this.logger.log('sqlite: executing sql_create_user', this.context);
             sqlite.run(sql_create_user);
 
-            console.log('sqlite: executing sql_create_user_preferences');
+            this.logger.log('sqlite: executing sql_create_user_preferences', this.context);
             sqlite.run(sql_create_user_preferences);
 
-            console.log('sqlite: executing sql_create_order');
+            this.logger.log('sqlite: executing sql_create_order', this.context);
             sqlite.run(sql_create_order);
 
-            console.log('sqlite: executing sql_create_order_response');
+            this.logger.log('sqlite: executing sql_create_order_response', this.context);
             sqlite.run(sql_create_order_response);
 
-            console.log('sqlite: executing sql_create_subscriptions');
+            this.logger.log('sqlite: executing sql_create_subscriptions', this.context);
             sqlite.run(sql_create_subscriptions);
 
-            console.log('sqlite: executing sql_create_config');
+            this.logger.log('sqlite: executing sql_create_config', this.context);
             sqlite.run(sql_create_config);
 
         })

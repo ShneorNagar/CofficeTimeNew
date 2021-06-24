@@ -13,7 +13,7 @@ export enum SQL {
                      inner join preferences p on u.user_id = p.user_id
                      where u.username = ?`,
 
-    user_getUserWithPassword = `SELECT u.username, p.*
+    user_getUserWithPassword = `SELECT u.username, u.user_id, p.*
                                 FROM USER u
                                 inner join preferences p on u.user_id = p.user_id
                                 where u.username = ? and u.password = ?`,
@@ -30,11 +30,11 @@ export enum SQL {
 
     preferences_createPreferences = `INSERT INTO preferences (coffee, tea, sugar, milk, note, drink_type, avatar, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
 
-    subscription_createSubscription = 'INSERT INTO SUBSCRIPTIONS (subscription, username) VALUES (?, ?)',
+    subscription_createSubscription = 'INSERT INTO SUBSCRIPTIONS (subscription, username, user_id) VALUES (?, ?, ?)',
 
-    subscription_getByUserName = 'SELECT username FROM SUBSCRIPTIONS WHERE username = ?',
+    subscription_getByUserId = 'SELECT username FROM SUBSCRIPTIONS WHERE user_id = ?',
 
-    subscription_getOtherSubscriptions = 'SELECT subscription FROM SUBSCRIPTIONS WHERE username != ?',
+    subscription_getOtherSubscriptions = 'SELECT subscription FROM SUBSCRIPTIONS WHERE user_id != ?',
 
     orders_createNewOrder = 'INSERT INTO ORDERS VALUES (?, ?, ?)',
 

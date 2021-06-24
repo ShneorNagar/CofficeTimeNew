@@ -60,7 +60,8 @@ export class UsersDalService {
     buildUserObject(row: any) {
         return {
             user: {
-                username: row['username']
+                username: row['username'],
+                userId: row['user_id']
             },
             preferences: {
                 coffee: row['coffee'],

@@ -1,5 +1,5 @@
 import * as webpush from 'web-push'
-import {Injectable, OnModuleInit} from "@nestjs/common";
+import {Injectable, Logger, OnModuleInit} from "@nestjs/common";
 import {PushDalService} from "./push-dal.service";
 
 @Injectable()
@@ -8,14 +8,17 @@ export class PushService implements OnModuleInit {
     constructor(private pushDalService: PushDalService) {
     }
 
+    private context = PushService.name;
+    private logger = new Logger(this.context);
+
     // TEMP CODE
     private readonly vapidKeys = {
         publicKey: "BCpSFWfgVVfw3eiPPNPYgtMQhuCehgkw_tq4XfmWWS1BiRop9KA4aw68VK3RORYExeEWR8_oOz8A9GjK5w4YK84",
         privateKey: "GDyGEozxx77wthpemL7udsgGx1QLMMsv-VYTFujO05w"
     }
 
-    async notifyUsers(username, orderId) {
-            const groupSubscriptions = await this.pushDalService.getGroupSubscriptions(username);
+    async notifyUsers(username, userId, orderId) {
+            const groupSubscriptions = await this.pushDalService.getGroupSubscriptions(userId);
             return this.sendPush(username, orderId, groupSubscriptions);
     }
 
@@ -29,6 +32,7 @@ export class PushService implements OnModuleInit {
 
     sendPush(username: string, orderId: string, allSubscriptions: any[]): Promise<any> {
 
+        this.logger.log(`sendPush started. sending push notifications to ${allSubscriptions.length} users`)
         const notificationPayload = {
             "notification": {
                 "title": "New CofficeTime order",

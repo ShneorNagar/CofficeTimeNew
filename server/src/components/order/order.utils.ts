@@ -1,5 +1,4 @@
 import {Injectable, Scope} from "@nestjs/common";
-import {Subject} from "rxjs";
 
 @Injectable({scope: Scope.DEFAULT})
 export class OrderUtils{
@@ -9,8 +8,6 @@ export class OrderUtils{
      *
      * when app will support groups - we will add multiple orders support
      */
-    public orderStatusSubject = new Subject<number>();
-
     public getCurrDate(){
         let currDate = new Date();
         const year = currDate.getFullYear();

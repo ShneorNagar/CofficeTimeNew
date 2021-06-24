@@ -16,12 +16,9 @@ export class OrdersService {
 
   async sendNewOrderRequest(): Promise<HttpResponse> {
     if (this.localUserService.isUserLoggedIn()) {
-      let usernameAsObject = {
-        username: this.localUserService.getUser().user.username
-      }
       let response: HttpResponse | any;
       try {
-        response = await this.httpService.sendPostRequest('orders/newOrder', usernameAsObject);
+        response = await this.httpService.sendPostRequest('orders/newOrder', this.localUserService.getUser().user);
         this.toastService.displayInfoToast('new order request sent.');
         this.httpService.displayToastByResponse(response);
         return response;

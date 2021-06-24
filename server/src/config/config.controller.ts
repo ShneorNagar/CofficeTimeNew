@@ -1,4 +1,4 @@
-import {Controller, Get} from "@nestjs/common";
+import {Controller, Get, Logger} from "@nestjs/common";
 import {FileSystemReader} from "../services/file-system.reader";
 import * as fs from 'fs';
 import {HttpResponse} from "../shared/user-entity";
@@ -10,12 +10,13 @@ export class ConfigController {
     fsReader: FileSystemReader;
     private readonly AVATARS_PATH = 'assets/avatars'
 
-    constructor() {
-    }
+    private context = ConfigController.name;
+    private logger = new Logger(this.context);
 
     @Get('avatars')
     async getAvatars(): Promise<HttpResponse> {
 
+        this.logger.log(`get avatars started,`, this.context);
         let avatars: {fileName: string, content: string }[] = [];
         this.fsReader = new FileSystemReader(this.AVATARS_PATH);
 
@@ -29,8 +30,10 @@ export class ConfigController {
                 });
             }
         } catch (err) {
+            this.logger.error(err, this.context);
             return err;
         }
+        this.logger.log(`get avatars ended. got ${avatars.length} avatars`, this.context);
         return {
             value: avatars,
             statusCode: HttpStatusCodeEnum.OK

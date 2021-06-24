@@ -5,6 +5,7 @@ import {
     WebSocketGateway, WebSocketServer,
 } from "@nestjs/websockets";
 import {Server} from 'socket.io'
+import {Logger} from "@nestjs/common";
 
 export enum EVENT_TYPE {
     RESPONSE = 'response',
@@ -12,28 +13,28 @@ export enum EVENT_TYPE {
 }
 
 @WebSocketGateway()
-export class WebSocketPlasma implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect{
-
-    constructor() {
-    }
+export class WebSocketPlasma implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
 
     @WebSocketServer() wss: Server;
 
+    private context = WebSocketPlasma.name;
+    private logger = new Logger(this.context);
+
     afterInit(server: any): any {
-        console.log(`webSocket init`);
+        this.logger.log(`webSocket init`, this.context);
     }
 
     handleConnection(client: any, ...args: any[]): any {
-        console.log(`webSocket connected!`);
+        this.logger.log(`webSocket connected`, this.context);
         this.sendMessage(EVENT_TYPE.ORDER, 'plasma ws connected');
     }
 
     handleDisconnect(client: any): any {
-        console.log(`webSocket Disconnect...`);
+        this.logger.warn(`webSocket Disconnect`, this.context);
     }
 
     sendMessage(eventType: string, data: any) {
-        this.wss.emit(eventType, { userResponse: data });
+        this.logger.debug(`sending sending message. eventType: ${eventType}, data: ${data}`, this.context);
+        this.wss.emit(eventType, {userResponse: data});
     }
-
 }

@@ -8,16 +8,16 @@ export class PushDalService {
     constructor(private sqlite: Sqlite) {
     }
 
-    getUserSubscription(username: string){
-        return this.sqlite.db.get(SQL.subscription_getByUserName, [username]);
+    getUserSubscription(userId: string){
+        return this.sqlite.db.get(SQL.subscription_getByUserId, [userId]);
     }
 
-    insertNewSubscription(subscription: any, username: string){
+    insertNewSubscription(subscription: any, username: string, userId: string){
         const subscriptionStr = JSON.stringify(subscription);
-        return this.sqlite.db.run(SQL.subscription_createSubscription, [subscriptionStr, username]);
+        return this.sqlite.db.run(SQL.subscription_createSubscription, [subscriptionStr, username, userId]);
     }
 
-    getGroupSubscriptions(username){
-        return this.sqlite.db.all(SQL.subscription_getOtherSubscriptions, [username]);
+    getGroupSubscriptions(user_id){
+        return this.sqlite.db.all(SQL.subscription_getOtherSubscriptions, [user_id]);
     }
 }

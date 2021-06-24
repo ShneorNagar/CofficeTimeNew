@@ -63,7 +63,7 @@ import { UserAvatarComponent } from './components/user-registration/user-avatar/
     SelectButtonModule,
     FormsModule,
     ToastModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {enabled: true}),
+    ServiceWorkerModule.register('ngsw-worker.js', {enabled: true, registrationStrategy: 'registerImmediately' }),
     ConfirmDialogModule,
     ChartModule,
     MenuModule,
