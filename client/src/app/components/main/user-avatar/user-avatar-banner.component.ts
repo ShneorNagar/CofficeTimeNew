@@ -31,8 +31,9 @@ export class UserAvatarBannerComponent implements OnInit {
     this.localUserService.userSub.subscribe((user) => {
       if (user && (!!user.preferences?.avatar)){
         this.avatar = user.preferences.avatar;
+      } else {
+        this.avatar = this.configService.AVATARS.default;
       }
-      this.avatar = this.configService.AVATARS.default;
     })
   }
 
