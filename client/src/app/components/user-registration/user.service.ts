@@ -7,6 +7,7 @@ import {UserEditComponent} from "./user-edit/user-edit.component";
 import {DialogService} from "primeng/dynamicdialog";
 import {ToastService} from "../../services/toast.service";
 import {HttpResponse} from "../../services/http/http-response";
+import {PushNotificationsService} from "../../services/push/push-notifications.service";
 
 enum routs {
   LOG_IN = "login",
@@ -22,7 +23,8 @@ export class UserService {
   constructor(private httpService: HttpService,
               private localUserService: LocalUserService,
               public dialogService: DialogService,
-              private toastService: ToastService) {}
+              private toastService: ToastService,
+              private pushNotificationsService : PushNotificationsService) {}
 
   public sendReqToServer(state: UserState, data: any) {
     switch (state) {
@@ -72,6 +74,7 @@ export class UserService {
         let message = this.httpService.stringifyResponseMessage(response.message);
         this.toastService.displaySuccessToast('Register', message);
         this.localUserService.saveUser(response.value);
+        this.pushNotificationsService.subscribeToNotifications();
         break;
       }
       case HttpStatusCodeEnum.UNAUTHORIZED: {

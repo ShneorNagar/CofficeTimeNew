@@ -10,8 +10,7 @@ export class SubscriptionService {
 
   constructor(private httpService: HttpService,
               private localUserService: LocalUserService,
-              private toastService: ToastService,
-              private userService: UserService) {
+              private toastService: ToastService) {
   }
 
   sendSubscriptionToServer(sub: any) {
@@ -32,7 +31,6 @@ export class SubscriptionService {
       })
     } else {
       this.toastService.displayInfoToast('please log in first');
-      this.userService.openLogInDialog();
     }
   }
 }
