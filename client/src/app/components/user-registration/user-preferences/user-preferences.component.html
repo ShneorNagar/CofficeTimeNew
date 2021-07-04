@@ -64,13 +64,13 @@
           </div>
 
           <div *ngSwitchCase="drinkTypeEnum.COFFEE" class="form__group" style="width: 35%">
-            <input type="text"
-                   class="form__field"
-                   placeholder="Type"
-                   name="milk"
-                   id='milk'
-                   [formControlName]="'milk'"/>
-            <label for="milk" class="form__label">Milk</label>
+            <p-dropdown [options]="milkTypes"
+                        [(ngModel)]="selectedMilkType"
+                        placeholder="Select a milk type"
+                        optionLabel="value"
+                        [showClear]="true"
+                        [formControlName]="'milk'">
+            </p-dropdown>
           </div>
 
           <div class="form__group">

@@ -34,7 +34,7 @@ export class WebSocketPlasma implements OnGatewayInit, OnGatewayConnection, OnGa
     }
 
     sendMessage(eventType: string, data: any) {
-        this.logger.debug(`sending sending message. eventType: ${eventType}, data: ${data}`, this.context);
+        this.logger.debug(`sending message. eventType: ${eventType}, data: ${data}`, this.context);
         this.wss.emit(eventType, {userResponse: data});
     }
 }

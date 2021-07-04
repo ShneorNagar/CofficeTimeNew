@@ -6,7 +6,7 @@
 
 export enum SQL {
 
-    user_getUsername = `SELECT username FROM USER WHERE username = ?`,
+    user_getUsername = `SELECT username, user_id FROM USER WHERE username = ?`,
 
     user_getUser = `SELECT u.username, p.*
                      FROM USER u

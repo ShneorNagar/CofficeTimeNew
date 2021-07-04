@@ -42,26 +42,27 @@ export class UsersController {
         const UUID = this.uuidService.generateUUID();
         try {
             this.logger.log(`register started`, this.context);
-            const user = this.usersDalService.getUser(body.user.username);
-            if (!user){
-                await this.usersDalService.createUser(UUID, body);
-                await this.usersDalService.createPreference(UUID, body);
-                let newUser = await this.usersDalService.logIn(body.user);
-                newUser = this.usersDalService.buildUserObject(newUser);
-                const message = `user ${body.user.username} created successfully.`;
-                this.logger.log(message, this.context);
-                return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.CREATED, newUser);
+            const user = await this.usersDalService.getUser(body.user.username);
+
+            if (user.username) {
+                const existMessage = `username: ${body.user.username} with userId: ${body.user.userId} already exist.`;
+                this.logger.log(existMessage, this.context);
+                return this.httpResponseService.buildResponse(existMessage, HttpStatusCodeEnum.CONFLICT);
             }
-            const existMessage = `username: ${body.user.username} with userId: ${body.user.userId} already exist.`;
-            this.logger.log(existMessage, this.context);
-            return this.httpResponseService.buildResponse(existMessage, HttpStatusCodeEnum.CONFLICT);
+
+            await this.usersDalService.createUser(UUID, body);
+            await this.usersDalService.createPreference(UUID, body);
+            let newUser = await this.usersDalService.logIn(body.user);
+            newUser = this.usersDalService.buildUserObject(newUser);
+            const message = `user ${body.user.username} created successfully.`;
+            this.logger.log(message, this.context);
+            return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.CREATED, newUser);
         } catch (err) {
             this.logger.error(err, this.context);
             return this.httpResponseService.buildResponse(err, HttpStatusCodeEnum.INTERNAL_SERVER_ERROR)
         }
     }
 
-    // todo test it
     @Post('update')
     async update(@Body() body: UserEntity): Promise<HttpResponse> {
         try {

@@ -15,8 +15,6 @@ import {ActivatedRoute, Router} from "@angular/router";
 export class HeaderComponent implements OnInit {
 
   user: any;
-  position: string = 'bottom';
-  displayLogInErrorDialog: boolean = false;
   isOrderActive: boolean;
 
   constructor(private primengConfig: PrimeNGConfig,

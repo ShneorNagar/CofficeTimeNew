@@ -4,7 +4,7 @@ import {LocalUserService} from "../../../services/local-storage/local-user.servi
 import {UserEntity} from "../../../shared/entities/user-entity";
 import {DrinkTypeEnum} from "../../../shared/drink-type.enum";
 import {DialogService} from "primeng/dynamicdialog";
-import {UserAvatarComponent} from "../user-avatar/user-avatar.component";
+import {UserAvatarComponent} from "./user-avatar/user-avatar.component";
 
 interface DrinkType {
   name: string,
@@ -30,7 +30,9 @@ export class PreferencesComponent implements OnInit {
   localUser: UserEntity;
   selectedDrinkType: DrinkType;
   drinkTypes: DrinkType[];
+  milkTypes: { value: string }[];
   tempAvatarSrc: string;
+  selectedMilkType: any;
 
   constructor(private localUserService: LocalUserService,
               public dialogService: DialogService) {
@@ -39,6 +41,15 @@ export class PreferencesComponent implements OnInit {
       {name: 'tea', type: DrinkTypeEnum.TEA, icon: 'assets/icons/tea.png'}
     ]
     this.selectedDrinkType = this.drinkTypes[0];
+
+    this.milkTypes = [
+      {value: 'רגיל'},
+      {value: 'דל לקטוז'},
+      {value: 'נטול לקטוז'},
+      {value: 'סויה'},
+      {value: 'להקצפה בשקשוק'},
+      {value: 'שקדים'},
+    ]
   }
 
   ngOnInit(): void {

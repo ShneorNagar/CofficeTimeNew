@@ -14,6 +14,7 @@ import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ConfirmationService, MessageService} from "primeng/api";
 import {ChartModule} from "primeng/chart";
 import {MenuModule} from 'primeng/menu';
+import {DropdownModule} from 'primeng/dropdown';
 
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
@@ -33,7 +34,7 @@ import {HomeFlipDirective} from './components/main/home/home-flip.directive';
 import {ChartComponent} from './components/chart/chart.component';
 import {TooltipModule} from "primeng/tooltip";
 import {UserAvatarBannerComponent} from './components/main/user-avatar/user-avatar-banner.component';
-import { UserAvatarComponent } from './components/user-registration/user-avatar/user-avatar.component';
+import { UserAvatarComponent } from './components/user-registration/user-preferences/user-avatar/user-avatar.component';
 
 @NgModule({
   declarations: [
@@ -63,11 +64,12 @@ import { UserAvatarComponent } from './components/user-registration/user-avatar/
     SelectButtonModule,
     FormsModule,
     ToastModule,
-    ServiceWorkerModule.register('ngsw-worker.js', {enabled: true, registrationStrategy: 'registerImmediately' }),
+    ServiceWorkerModule.register('ngsw-worker.js', {enabled: true, registrationStrategy: 'registerImmediately'}),
     ConfirmDialogModule,
     ChartModule,
     MenuModule,
-    TooltipModule
+    TooltipModule,
+    DropdownModule
   ],
   providers: [
     DialogService,

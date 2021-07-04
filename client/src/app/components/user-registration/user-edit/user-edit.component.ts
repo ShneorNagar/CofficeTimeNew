@@ -32,18 +32,43 @@ export class UserEditComponent implements OnInit {
     this.formGroup = new FormGroup({});
   }
 
-  // todo get value in better way
-  private setUserAvatarAndDrinkTypeIfExist(){
-    const preferencesFormVal = this.formGroup.get('preferences');
-    if (preferencesFormVal){
-      const avatar = !!preferencesFormVal.get('avatar').value ? preferencesFormVal.get('avatar').value : this.configService.AVATARS.default;
-      this.localUserService.setAvatar(avatar);
+  private flattenAvatarValue(preferences: any) {
+      const avatar = preferences.avatar ?? this.configService.AVATARS.default;
+      return {
+        ...preferences,
+        avatar
+      }
+  }
+
+  private flattenMilkValue(preferences: any) {
+    const milkValue = preferences?.milk?.value;
+    return {
+      ...preferences,
+      milk: milkValue
     }
+  }
+
+  private flattenDrinkTypeValue(preferences: any) {
+    const drinkType = preferences?.drink_type?.name;
+    return {
+      ...preferences,
+      drink_type: drinkType
+    }
+  }
+
+  private flattenPreferencesData(preferences: any){
+    let flattenFormValues = this.flattenMilkValue(preferences);
+    flattenFormValues = this.flattenDrinkTypeValue(flattenFormValues);
+    flattenFormValues = this.flattenAvatarValue(flattenFormValues)
+    return flattenFormValues;
   }
 
   submit() {
     if (this.formGroup.valid) {
-      this.setUserAvatarAndDrinkTypeIfExist();
+      if (this.formGroup.value.preferences){
+        this.formGroup.value.preferences = this.flattenPreferencesData(this.formGroup.value.preferences);
+        this.localUserService.setAvatar(this.formGroup.value.preferences.avatar);
+      }
       this.ref.close({
         user: this.buildSubmitValue(this.formGroup.value)
       });
