@@ -6,6 +6,7 @@ import {UserEditComponent} from "../../user-registration/user-edit/user-edit.com
 import {UserService} from "../../user-registration/user.service";
 import {LocalUserService} from "../../../services/local-storage/local-user.service";
 import {ActivatedRoute, Router} from "@angular/router";
+import {ActiveOrder, ConfigService} from "../../../services/config.service";
 
 @Component({
   selector: 'app-header',
@@ -15,14 +16,16 @@ import {ActivatedRoute, Router} from "@angular/router";
 export class HeaderComponent implements OnInit {
 
   user: any;
-  isOrderActive: boolean;
+  showNotifications: boolean;
+  activeOrder: ActiveOrder;
 
   constructor(private primengConfig: PrimeNGConfig,
               public dialogService: DialogService,
               private userService: UserService,
               private localUserService: LocalUserService,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private configService: ConfigService) {
   }
 
   ngOnInit(): void {
@@ -31,6 +34,11 @@ export class HeaderComponent implements OnInit {
     this.localUserService.userSub.subscribe(value => {
       this.user = value;
     })
+
+    this.configService.loadActiveOrder()
+      .then(order => {
+        this.activeOrder = order
+      })
   }
 
   public get state() {
@@ -57,5 +65,9 @@ export class HeaderComponent implements OnInit {
 
   navigateToHome() {
     this.router.navigate(['main'], {relativeTo: this.route})
+  }
+
+  toggleNotifications() {
+    this.showNotifications = !this.showNotifications;
   }
 }

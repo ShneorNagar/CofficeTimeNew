@@ -35,6 +35,7 @@ import {ChartComponent} from './components/chart/chart.component';
 import {TooltipModule} from "primeng/tooltip";
 import {UserAvatarBannerComponent} from './components/main/user-avatar/user-avatar-banner.component';
 import { UserAvatarComponent } from './components/user-registration/user-preferences/user-avatar/user-avatar.component';
+import { NotificationsComponent } from './components/main/notifications/notifications.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { UserAvatarComponent } from './components/user-registration/user-prefere
     HomeFlipDirective,
     ChartComponent,
     UserAvatarBannerComponent,
-    UserAvatarComponent
+    UserAvatarComponent,
+    NotificationsComponent
   ],
   imports: [
     BrowserModule,

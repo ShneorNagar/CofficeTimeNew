@@ -32,23 +32,10 @@ export class HttpService {
   }
 
   displayToastByResponse(response: HttpResponse){
-    switch (response.statusCode) {
-      case HttpStatusCodeEnum.OK: {
-        this.toastService.displaySuccessToast(this.stringifyResponseMessage(response.message));
-        break;
-      }
-      case HttpStatusCodeEnum.UNAUTHORIZED: {
-        this.toastService.displayErrorToast(this.stringifyResponseMessage(response.message));
-        break;
-      }
-      case HttpStatusCodeEnum.CONFLICT: {
-        this.toastService.displayErrorToast(this.stringifyResponseMessage(response.message));
-        break;
-      }
-      case HttpStatusCodeEnum.INTERNAL_SERVER_ERROR: {
-        this.toastService.displayErrorToast(this.stringifyResponseMessage(response.message));
-        break;
-      }
+    if (response.statusCode == HttpStatusCodeEnum.OK || response.statusCode == HttpStatusCodeEnum.CREATED){
+      this.toastService.displaySuccessToast(this.stringifyResponseMessage(response.message));
+    } else {
+      this.toastService.displayErrorToast(this.stringifyResponseMessage(response.message));
     }
   }
 }

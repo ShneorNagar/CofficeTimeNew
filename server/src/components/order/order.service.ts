@@ -17,7 +17,7 @@ export class OrderService {
     private context = OrderService.name;
     private logger = new Logger(this.context);
 
-    async openOrder(): Promise<any | HttpErrorObject> {
+    async openOrder(userId: string): Promise<any | HttpErrorObject> {
         this.logger.log(`openOrder started`, this.context)
         let order = await this.orderDalService.getActiveOrder();
         if (order) {
@@ -27,7 +27,7 @@ export class OrderService {
                 this.logger.log(`deactivating old order, and open new one`, this.context)
                 await this.orderDalService.deactivateOrderById(currOrderId);
                 const newOrderId = this.uuidService.generateUUID();
-                await this.orderDalService.createNewOrder(newOrderId);
+                await this.orderDalService.createNewOrder(newOrderId, userId);
                 return newOrderId;
             } else {
                 const message = 'there is an active order already.';
@@ -37,7 +37,7 @@ export class OrderService {
         } else {
             this.logger.log(`opening new order`, this.context)
             const newOrderId = this.uuidService.generateUUID();
-            await this.orderDalService.createNewOrder(newOrderId);
+            await this.orderDalService.createNewOrder(newOrderId, userId);
             return newOrderId;
         }
     }
@@ -46,12 +46,21 @@ export class OrderService {
         this.logger.log(`updateUserResponse started. username: ${body.username}`, this.context)
         let userResponse = await this.orderDalService.getUserResponse(body);
         if (!userResponse) {
-            this.logger.log(`user response saved. username: ${body.username}`, this.context)
+            this.logger.log(`saving user response. username: ${body.username}`, this.context)
             return this.orderDalService.updateUserResponse(body);
         } else {
-            const message = 'you have responded already';
-            this.logger.log(`user responded already. username: ${body.username}`, this.context)
+            const message = `user responded already. username: ${body.username}`;
+            this.logger.log(message, this.context)
             return Promise.reject(this.httpResponseService.buildErrorObj(message, HttpStatusCodeEnum.CONFLICT));
+        }
+    }
+
+    getActiveOrderDetails(){
+        this.logger.log(`getActiveOrderDetails started.`, this.context)
+        try {
+            return this.orderDalService.getActiveOrderDetails();
+        } catch (err){
+            return Promise.reject(this.httpResponseService.buildErrorObj(err, HttpStatusCodeEnum.INTERNAL_SERVER_ERROR));
         }
     }
 

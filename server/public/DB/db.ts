@@ -25,7 +25,7 @@ export class Sqlite {
                                         milk VARCHAR, note VARCHAR, drink_type VARCHAR, avatar TEXT, user_id VARCHAR, 
                                         FOREIGN KEY(user_id) REFERENCES user (user_id));`;
 
-            let sql_create_order = `CREATE TABLE IF NOT EXISTS ORDERS (order_id VARCHAR NOT NULL, is_order_active INTEGER NOT NULL,
+            let sql_create_order = `CREATE TABLE IF NOT EXISTS ORDERS (order_id VARCHAR NOT NULL, caller_id VARCHAR NOT NULL, is_order_active INTEGER NOT NULL,
                                                                 order_time DATE NOT NULL, PRIMARY KEY("order_id"));`;
 
             let sql_create_order_response = `CREATE TABLE IF NOT EXISTS ORDERS_RESPONSES (username VARCHAR, response_time DATE, response_value VARCHAR,

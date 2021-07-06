@@ -7,14 +7,17 @@
 <div class="header-container">
   <div style="margin-left: 10px">
     <button *ngIf="user"
+            (click)="toggleNotifications()"
             icon="pi pi-bell"
             pTooltip="Notifications"
             tooltipPosition="right"
             pButton pRipple
             type="button"
             class="p-button-raised p-button-text p-button-plain header-button">
-      <span id="redDot" [ngClass]="isOrderActive ? 'show' : 'hide'"></span>
+      <span id="redDot" [ngClass]="!!activeOrder ? 'show' : 'hide'"></span>
     </button>
+
+    <app-notifications *ngIf="showNotifications" (responseSent)="toggleNotifications()" [order]="activeOrder"></app-notifications>
   </div>
 
   <div class="buttons-container" style="margin-right: 10px">

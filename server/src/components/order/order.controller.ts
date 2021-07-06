@@ -1,4 +1,4 @@
-import {Body, Controller, Logger, Post} from "@nestjs/common";
+import {Body, Controller, Get, Logger, Post} from "@nestjs/common";
 import {OrderService} from "./order.service";
 import {PushDalService} from "../push/push-dal.service";
 import {PushService} from "../push/push.service";
@@ -26,7 +26,7 @@ export class OrderController {
 
         let responseMessage;
         try {
-            let newOrderId = await this.orderService.openOrder()
+            let newOrderId = await this.orderService.openOrder(user.userId)
             await this.pushService.notifyUsers(user.username, user.userId, newOrderId);
 
             responseMessage = 'push notification sent successfully';
@@ -49,6 +49,25 @@ export class OrderController {
             responseMessage = 'thanks! your response will display on the plasma';
             return this.httpResponseService.buildResponse(responseMessage, HttpStatusCodeEnum.CREATED);
         } catch (err) {
+            this.logger.error(err, this.context);
+            return this.httpResponseService.buildCustomErrorResponse(err);
+        }
+    }
+
+    @Get('activeOrderDetails')
+    async getActiveOrder(){
+        this.logger.log(`getActiveOrder started`, this.context);
+        try {
+            const activeOrder = await this.orderService.getActiveOrderDetails();
+            if (activeOrder){
+                const message = 'active order details fetched.'
+                this.logger.log(message, this.context);
+                return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.OK, activeOrder);
+            }
+            const message = 'active order details not found.'
+            this.logger.log(message, this.context);
+            return this.httpResponseService.buildResponse(message);
+        } catch (err){
             this.logger.error(err, this.context);
             return this.httpResponseService.buildCustomErrorResponse(err);
         }

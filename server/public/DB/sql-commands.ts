@@ -36,13 +36,18 @@ export enum SQL {
 
     subscription_getOtherSubscriptions = 'SELECT subscription FROM SUBSCRIPTIONS WHERE user_id != ?',
 
-    orders_createNewOrder = 'INSERT INTO ORDERS VALUES (?, ?, ?)',
+    orders_createNewOrder = 'INSERT INTO ORDERS VALUES (?, ?, ?, ?)',
 
     orders_deactivateOrder = `UPDATE ORDERS SET is_order_active = 0 WHERE order_id = ?`,
 
     orders_getActiveOrder = 'SELECT * from orders where is_order_active = 1',
 
     orders_getOrderById =  'SELECT * FROM ORDERS WHERE order_id = ?',
+
+    orders_getActiveOrderDetails = `SELECT o.order_id, o.order_time, o.caller_id, u.username
+                                    from ORDERS o
+                                    INNER JOIN USER u on u.user_id = o.caller_id
+                                    WHERE o.is_order_active = 1`,
 
     orders_responses_createNewResponse = 'INSERT INTO ORDERS_RESPONSES VALUES (?, ?, ?, ?)',
 

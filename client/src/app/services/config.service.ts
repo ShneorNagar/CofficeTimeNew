@@ -1,9 +1,18 @@
 import {Injectable, OnInit} from '@angular/core';
 import {HttpService} from "./http/http.service";
+import {HttpResponse} from "./http/http-response";
+import {DateGeneratorUtils} from "./utils/date-generator.utils";
 
 export interface Avatars {
   all: string[],
   default: string
+}
+
+export interface ActiveOrder{
+  order_id: string;
+  order_time: string;
+  caller_id: string;
+  username: string;
 }
 
 @Injectable({
@@ -11,15 +20,28 @@ export interface Avatars {
 })
 export class ConfigService {
 
+  public AVATARS: Avatars;
   cacheAvatars: string[] = [];
   cacheDefaultAvatar: string;
-  public AVATARS: Avatars;
+
 
   constructor(private httpService: HttpService) {
   }
 
   async loadAvatars() {
     this.AVATARS = await this.getAvatars();
+  }
+
+  async loadActiveOrder(): Promise<ActiveOrder | null>{
+    try {
+      const res = await this.getActiveOrder();
+      const order: ActiveOrder = res['value'];
+      const isOrderTimeOut = ConfigService.calculateOrderTimeOut(order);
+      return isOrderTimeOut ? null : order;
+    } catch (err){
+      console.error(`error while getting active order.`)
+      console.error(err);
+    }
   }
 
   private async getAvatars(): Promise<Avatars> {
@@ -32,5 +54,17 @@ export class ConfigService {
       all: this.cacheAvatars,
       default: this.cacheDefaultAvatar
     }
+  }
+
+  private async getActiveOrder(): Promise<HttpResponse>{
+    return this.httpService.sendGetRequest('orders/activeOrderDetails');
+  }
+
+  private static calculateOrderTimeOut(order){
+    let orderTime = new Date(order['order_time']);
+    let currTime = new Date(DateGeneratorUtils.getCurrDate());
+    let timeDiff = currTime.getTime() - orderTime.getTime();
+    let minuteDiff = timeDiff / 1000 / 60;
+    return minuteDiff > 3;
   }
 }

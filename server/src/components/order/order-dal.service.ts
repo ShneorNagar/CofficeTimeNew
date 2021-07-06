@@ -32,7 +32,11 @@ export class OrderDalService {
         return this.sqlite.db.run(SQL.orders_deactivateOrder, [orderId])
     }
 
-    createNewOrder(orderId: string) {
-        return this.sqlite.db.run(SQL.orders_createNewOrder, [orderId, 1, this.orderUtils.getCurrDate()]);
+    createNewOrder(orderId: string, userId: string) {
+        return this.sqlite.db.run(SQL.orders_createNewOrder, [orderId, userId, 1, this.orderUtils.getCurrDate()]);
+    }
+
+    getActiveOrderDetails(){
+        return this.sqlite.db.get(SQL.orders_getActiveOrderDetails, [])
     }
 }
