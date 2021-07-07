@@ -2,11 +2,20 @@
   <div class="arrow"></div>
   <div class="content">
     <div class="title">
-      <span>new order by {{order.username}}</span>
+      <span>{{title}}</span>
     </div>
-    <div class="btns-set">
-      <button pButton pRipple type="button" icon="pi pi-check" class="p-button-rounded" (click)="accept()"></button>
-      <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger" (click)="decline()"></button>
-    </div>
+    <div class="br"></div>
+    <div *ngIf="isOrderActive then btnSet else notificationsImage"></div>
   </div>
 </div>
+
+<ng-template #btnSet>
+  <div class="btns-set">
+    <p-button (click)="accept()" label="Accept" icon="pi pi-check" class="accept-btn"></p-button>
+    <p-button (click)="decline()" label="Decline" icon="pi pi-times" class="decline-btn"></p-button>
+  </div>
+</ng-template>
+
+<ng-template #notificationsImage>
+  <img style="width: 15%" alt="empty notification" src="../../../../assets/icons/empty-notification.png">
+</ng-template>

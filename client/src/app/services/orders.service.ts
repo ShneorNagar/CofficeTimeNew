@@ -19,7 +19,6 @@ export class OrdersService {
       let response: HttpResponse | any;
       try {
         response = await this.httpService.sendPostRequest('orders/newOrder', this.localUserService.getUser().user);
-        this.toastService.displayInfoToast('new order request sent.');
         this.httpService.displayToastByResponse(response);
         return response;
       } catch (err) {

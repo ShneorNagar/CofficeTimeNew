@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {CoffeeFactsData} from "./coffee-facts-data";
 import {WebSocketService} from "../../../services/web-socket/web-socket.service";
 import {OrdersService} from "../../../services/orders.service";
-import {HttpStatusCodeEnum} from "../../../services/http/http-status-code.enum";
 
 @Component({
   selector: 'app-home',
@@ -38,8 +37,6 @@ export class HomeComponent {
   }
 
   async startNewOrder() {
-    let response = await this.pushService.sendNewOrderRequest();
-    this.isOrderSent = response?.statusCode === HttpStatusCodeEnum.OK;
-    console.log(this.isOrderSent)
+    await this.pushService.sendNewOrderRequest();
   }
 }
