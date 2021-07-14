@@ -19,7 +19,7 @@ export class OrderDalService {
     }
 
     getUserResponse(body: any) {
-        let username = body.username;
+        let username = body.userId;
         let ownerOrderId = body.orderId;
         return this.sqlite.db.get(SQL.orders_responses_getRespondedUser, [username, ownerOrderId]);
     }

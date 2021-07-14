@@ -28,8 +28,8 @@ export class Sqlite {
             let sql_create_order = `CREATE TABLE IF NOT EXISTS ORDERS (order_id VARCHAR NOT NULL, caller_id VARCHAR NOT NULL, is_order_active INTEGER NOT NULL,
                                                                 order_time DATE NOT NULL, PRIMARY KEY("order_id"));`;
 
-            let sql_create_order_response = `CREATE TABLE IF NOT EXISTS ORDERS_RESPONSES (username VARCHAR, response_time DATE, response_value VARCHAR,
-                                                                                   owner_order_id VARCHAR,FOREIGN KEY(owner_order_id) REFERENCES ORDERS (order_id));`;
+            let sql_create_order_response = `CREATE TABLE IF NOT EXISTS ORDERS_RESPONSES (user_id VARCHAR, response_time DATE, response_value VARCHAR, order_id VARCHAR, 
+                                                                                          FOREIGN KEY(order_id) REFERENCES ORDERS (order_id));`;
 
             let sql_create_subscriptions = `CREATE TABLE IF NOT EXISTS SUBSCRIPTIONS (subscription TEXT, username VARCHAR, user_id VARCHAR,
                                             FOREIGN KEY(user_id) REFERENCES user (user_id));`;

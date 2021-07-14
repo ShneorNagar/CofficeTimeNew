@@ -7,6 +7,7 @@ import {UserService} from "../../user-registration/user.service";
 import {LocalUserService} from "../../../services/local-storage/local-user.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ActiveOrder, ConfigService} from "../../../services/config.service";
+import {ChartComponent} from "../../chart/chart.component";
 
 @Component({
   selector: 'app-header',
@@ -69,5 +70,13 @@ export class HeaderComponent implements OnInit {
 
   toggleNotifications() {
     this.showNotifications = !this.showNotifications;
+  }
+
+  openChart() {
+    this.dialogService.open(ChartComponent, {
+      header: 'Chart',
+      width: '70%',
+      height: 'fill-content',
+    });
   }
 }

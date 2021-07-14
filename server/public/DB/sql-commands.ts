@@ -49,11 +49,21 @@ export enum SQL {
                                     INNER JOIN USER u on u.user_id = o.caller_id
                                     WHERE o.is_order_active = 1`,
 
+    orders_stats_getAllUserOrdersByUserId = `SELECT u.username, o.order_id, o.order_time as time
+                                             FROM ORDERS o
+                                             INNER JOIN USER u on u.user_id = o.caller_id
+                                             WHERE u.user_id = ?`,
+
+    orders_stats_responses_getOrderResponsesByUserId = `SELECT u.username, o.order_id, o.response_time as time
+                                                 FROM ORDERS_RESPONSES o
+                                                 INNER JOIN USER u on u.user_id = o.user_id
+                                                 WHERE o.response_value = 'accept' AND u.user_id = ?`,
+
     orders_responses_createNewResponse = 'INSERT INTO ORDERS_RESPONSES VALUES (?, ?, ?, ?)',
 
-    orders_responses_getRespondedUser = `SELECT username FROM ORDERS_RESPONSES WHERE username = ? AND owner_order_id = ?`,
+    orders_responses_getRespondedUser = `SELECT user_id FROM ORDERS_RESPONSES WHERE user_id = ? AND order_id = ?`,
 
     orders_responses_getAllResponsesOfOrder = `SELECT r.*
                                                FROM ORDERS_RESPONSES r
-                                               INNER JOIN ORDERS o ON r.owner_order_id = ?`
+                                               INNER JOIN ORDERS o ON r.order_id = ?`
 }

@@ -58,13 +58,9 @@ export class NotificationsComponent implements OnChanges{
   }
   private buildReqBody(value: UserResponseEnum, orderId: string) {
     return {
-      username: this.userEntity.user.username,
+      userId: this.userEntity.user.userId,
       value,
       orderId
     }
-  }
-
-  alert() {
-    alert('123')
   }
 }

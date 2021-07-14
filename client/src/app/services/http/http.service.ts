@@ -15,8 +15,8 @@ export class HttpService {
               private toastService: ToastService) {
   }
 
-  sendGetRequest(path: string): Promise<HttpResponse>{
-    return this.http.get<HttpResponse>(`${this.SERVER_URL}${path}`).toPromise();
+  sendGetRequest(path: string, params?: any): Promise<HttpResponse>{
+    return this.http.get<HttpResponse>(`${this.SERVER_URL}${path}`, {params: params}).toPromise();
   }
 
   sendPostRequest(path: string, body: any, options?: {headers: HttpHeaders}): Promise<HttpResponse> {

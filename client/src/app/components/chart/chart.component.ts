@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {ChartService} from "./chart.service";
+import {CupSummary} from "./chart.entity";
 
 @Component({
   selector: 'app-chart',
@@ -7,28 +9,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChartComponent implements OnInit {
 
-  basicData: any;
+  chartYear: any;
+  chartMonth: any;
+  @Input() summaryNumbers;
+  @Input() chartData;
+  cupsSummary: CupSummary[];
 
-  constructor() { }
+  constructor(private chartService: ChartService) {
+    this.chartService.init().then(() =>{
+      this.cupsSummary = this.chartService.getCupsSummary();
+      this.chartYear = this.chartService.chartYear;
+      this.chartMonth = this.chartService.chartMonth;
+    });
+  }
 
   ngOnInit(): void {
-    this.basicData = {
-      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-      datasets: [
-        {
-          label: 'First Dataset',
-          data: [65, 59, 80, 81, 56, 55, 40],
-          fill: false,
-          borderColor: '#42A5F5'
-        },
-        {
-          label: 'Second Dataset',
-          data: [28, 48, 40, 19, 86, 27, 90],
-          fill: false,
-          borderColor: '#FFA726'
-        }
-      ]
-    }
   }
 
 }

@@ -1,0 +1,16 @@
+.summary-container{
+  display: flex;
+  justify-content: space-around;
+}
+
+.summary-counter{
+  text-align: center;
+}
+
+.counter{
+  font-size: 60px
+}
+
+.counter-value{
+  font-size: 25px;
+}

@@ -13,10 +13,18 @@ import {HttpResponseService} from "./services/http/http-response.service";
 import {UUIDService} from "./services/uuid-service";
 import {WebSocketPlasma} from "./web-socket/event-gateway.app";
 import {ConfigController} from "./config/config.controller";
+import {StatsController} from "./components/stats/stats.controller";
+import {StatsDalService} from "./components/stats/stats-dal.service";
+import {StatsService} from "./components/stats/stats.service";
 
 @Module({
     imports: [],
-    controllers: [UsersController, PushController, OrderController, ConfigController],
+    controllers: [
+        UsersController,
+        PushController,
+        OrderController,
+        ConfigController,
+        StatsController],
     providers: [UsersDalService,
         PushDalService,
         PushService,
@@ -26,7 +34,9 @@ import {ConfigController} from "./config/config.controller";
         Sqlite,
         HttpResponseService,
         UUIDService,
-        WebSocketPlasma],
+        WebSocketPlasma,
+        StatsDalService,
+        StatsService],
 })
 export class AppModule {
 }

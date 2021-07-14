@@ -10,11 +10,21 @@
             (click)="toggleNotifications()"
             icon="pi pi-bell"
             pTooltip="Notifications"
-            tooltipPosition="right"
+            tooltipPosition="bottom"
             pButton pRipple
             type="button"
             class="p-button-raised p-button-text p-button-plain header-button">
       <span id="redDot" [ngClass]="!!activeOrder ? 'show' : 'hide'"></span>
+    </button>
+
+    <button *ngIf="user"
+            (click)="openChart()"
+            icon="pi pi-chart-line"
+            pTooltip="Charts"
+            tooltipPosition="bottom"
+            pButton pRipple
+            type="button"
+            class="p-button-raised p-button-text p-button-plain header-button">
     </button>
 
     <app-notifications *ngIf="showNotifications" (responseSent)="toggleNotifications()" [order]="activeOrder"></app-notifications>
@@ -23,20 +33,20 @@
   <div class="buttons-container" style="margin-right: 10px">
     <button pButton pRipple
             type="button"
-            icon="pi pi-sign-in"
-            pTooltip="Log-in"
-            tooltipPosition="left"
-            *ngIf="!user"
-            (click)="openUserData(state.LOG_IN)"
-            class="p-button-raised p-button-primary p-button-text header-button"></button>
-
-    <button pButton pRipple
-            type="button"
             icon="pi pi-user-plus"
             pTooltip="Register"
             tooltipPosition="left"
             *ngIf="!user"
             (click)="openUserData(state.REGISTER)"
+            class="p-button-raised p-button-primary p-button-text header-button"></button>
+
+    <button pButton pRipple
+            type="button"
+            icon="pi pi-sign-in"
+            pTooltip="Log-in"
+            tooltipPosition="left"
+            *ngIf="!user"
+            (click)="openUserData(state.LOG_IN)"
             class="p-button-raised p-button-primary p-button-text header-button"></button>
 
       <app-user-avatar [isOpenMenu]="true" *ngIf="user"></app-user-avatar>

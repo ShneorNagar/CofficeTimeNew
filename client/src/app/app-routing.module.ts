@@ -1,13 +1,11 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {PreferencesComponent} from "./components/user-registration/user-preferences/user-preferences.component";
-import {UserResponseComponent} from "./components/user-response/user-response.component";
 import {HomeComponent} from "./components/main/home/home.component";
+import {ChartComponent} from "./components/chart/chart.component";
 
 const routes: Routes = [
   {path: 'home', pathMatch: 'full', component: HomeComponent},
-  {path: 'preference', pathMatch: 'full', component: PreferencesComponent},
-  {path: 'reaction', pathMatch: 'full', component: UserResponseComponent},
+  {path: 'chart', pathMatch: 'full', component: ChartComponent},
   {path: '', redirectTo: '/home', pathMatch: 'full'},
   {path: '**', redirectTo: 'home'}
 ];
