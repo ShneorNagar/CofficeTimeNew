@@ -28,6 +28,10 @@ export class ConfigService {
   constructor(private httpService: HttpService) {
   }
 
+  async loadAllUsers(userId){
+    return await this.httpService.sendGetRequest('users/allUsers',{userId});
+  }
+
   async loadAvatars() {
     this.AVATARS = await this.getAvatars();
   }

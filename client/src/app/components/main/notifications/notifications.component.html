@@ -11,8 +11,8 @@
 
 <ng-template #btnSet>
   <div class="btns-set">
-    <p-button (click)="accept()" label="Accept" icon="pi pi-check" class="accept-btn"></p-button>
-    <p-button (click)="decline()" label="Decline" icon="pi pi-times" class="decline-btn"></p-button>
+    <button (click)="accept()" pButton pRipple type="button" icon="pi pi-check" class="accept-btn p-button-rounded"></button>
+    <button (click)="decline()" pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger"></button>
   </div>
 </ng-template>
 

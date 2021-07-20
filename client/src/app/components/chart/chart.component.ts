@@ -1,29 +1,50 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ChartService} from "./chart.service";
-import {CupSummary} from "./chart.entity";
+import {ICupSummary, IChart, ChartData} from "./chart.entity";
+import {ConfigService} from "../../services/config.service";
+import {LocalUserService} from "../../services/local-storage/local-user.service";
+import {Observable, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-chart',
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css']
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent implements OnInit{
 
-  chartYear: any;
-  chartMonth: any;
-  @Input() summaryNumbers;
-  @Input() chartData;
-  cupsSummary: CupSummary[];
+  chartYear: ChartData;
+  chartMonth: ChartData;
+  chartWeek: ChartData;
+  charts: ChartData[] = [];
+  cupsSummary: ICupSummary[];
 
-  constructor(private chartService: ChartService) {
-    this.chartService.init().then(() =>{
-      this.cupsSummary = this.chartService.getCupsSummary();
-      this.chartYear = this.chartService.chartYear;
-      this.chartMonth = this.chartService.chartMonth;
-    });
-  }
+  users: any[];
+  usersNames: any;
+  selectedUser: string;
+  placeholder: any;
+
+  constructor(private chartService: ChartService,
+              private configService: ConfigService,
+              private localUserService: LocalUserService) {}
 
   ngOnInit(): void {
+    this.chartService.init().then(() => {
+      this.cupsSummary = this.chartService.getCupsSummary();
+      this.charts = this.chartService.getCharts();
+    });
+
+    this.configService.loadAllUsers(this.localUserService.getUser().user.userId)
+      .then(res => {
+        this.users = res.value;
+
+        let usersNamesTmp = [];
+        res.value.forEach(user => usersNamesTmp.push(user.username));
+        this.usersNames = usersNamesTmp;
+      });
   }
 
+  addChartData() {
+    const user = this.users.find(user => user.username === this.selectedUser);
+    this.chartService.updateChartsByUserId(user.user_id).then((charts: ChartData[]) => this.charts = charts);
+  }
 }

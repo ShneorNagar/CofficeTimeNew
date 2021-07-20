@@ -1,0 +1,4 @@
+<div *ngFor="let chart of charts" class="chart-container">
+  <p class="chart-title">{{chart.title}}</p>
+  <p-chart type="line" [data]="chart.chart"></p-chart>
+</div>

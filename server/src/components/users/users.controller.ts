@@ -1,4 +1,4 @@
-import {Body, Controller, Logger, Post} from "@nestjs/common";
+import {Body, Controller, Get, Logger, Post, Req} from "@nestjs/common";
 import {UsersDalService} from "./users-dal.service";
 import {HttpResponse, UserDTO, UserEntity} from "../../shared/user-entity";
 import {HttpResponseService} from "../../services/http/http-response.service";
@@ -45,7 +45,7 @@ export class UsersController {
             const user = await this.usersDalService.getUser(body.user.username);
 
             if (user.username) {
-                const existMessage = `username: ${body.user.username} with userId: ${body.user.userId} already exist.`;
+                const existMessage = `username: ${user.username} already exist.`;
                 this.logger.log(existMessage, this.context);
                 return this.httpResponseService.buildResponse(existMessage, HttpStatusCodeEnum.CONFLICT);
             }
@@ -79,8 +79,16 @@ export class UsersController {
         }
     }
 
-    // @Delete(':id')
-    // delete(@Param() params): string {
-    //     return `user deleted ${params.id}`;
-    // }
+    @Get('allUsers')
+    async getAllUsers(@Req() req){
+        const userId = req.query.userId;
+        this.logger.log(`getAllUsers started. userId: ${userId}`, this.context);
+        try {
+            const users = await this.usersDalService.getAllUsers(userId);
+            this.logger.log(`getAllUsers ended.`);
+            return this.httpResponseService.buildResponse(null, HttpStatusCodeEnum.OK, users);
+        } catch (err){
+
+        }
+    }
 }

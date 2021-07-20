@@ -8,6 +8,8 @@ export enum SQL {
 
     user_getUsername = `SELECT username, user_id FROM USER WHERE username = ?`,
 
+    user_getAllAcceptCurrent = `SELECT username, user_id FROM USER WHERE user_id != ?`,
+
     user_getUser = `SELECT u.username, p.*
                      FROM USER u
                      inner join preferences p on u.user_id = p.user_id

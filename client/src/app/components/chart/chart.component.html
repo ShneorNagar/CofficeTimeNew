@@ -1,3 +1,10 @@
+<div>
+  <span style="margin-right: 10px">Add chart:</span>
+  <p-dropdown [options]="usersNames"
+              [(ngModel)]="selectedUser"
+              [placeholder]="'username'" (onChange)="addChartData()"></p-dropdown>
+</div>
+
 <div class="summary-container">
   <div *ngFor="let cup of cupsSummary" class="summary-counter">
     <div class="counter">{{cup.count}}</div>
@@ -5,6 +12,4 @@
   </div>
 </div>
 
-<p-chart type="line" [data]="chartYear"></p-chart>
-<p-chart type="line" [data]="chartMonth"></p-chart>
-
+<app-chart-unit [charts]="charts"></app-chart-unit>

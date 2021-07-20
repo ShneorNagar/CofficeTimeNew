@@ -8,6 +8,7 @@ import {LocalUserService} from "../../../services/local-storage/local-user.servi
 import {ActivatedRoute, Router} from "@angular/router";
 import {ActiveOrder, ConfigService} from "../../../services/config.service";
 import {ChartComponent} from "../../chart/chart.component";
+import {ChartService} from "../../chart/chart.service";
 
 @Component({
   selector: 'app-header',
@@ -26,7 +27,8 @@ export class HeaderComponent implements OnInit {
               private localUserService: LocalUserService,
               private router: Router,
               private route: ActivatedRoute,
-              private configService: ConfigService) {
+              private configService: ConfigService,
+              private chartService: ChartService) {
   }
 
   ngOnInit(): void {
@@ -73,10 +75,13 @@ export class HeaderComponent implements OnInit {
   }
 
   openChart() {
-    this.dialogService.open(ChartComponent, {
+    const ref = this.dialogService.open(ChartComponent, {
       header: 'Chart',
       width: '70%',
       height: 'fill-content',
     });
+    ref.onDestroy.subscribe(() =>{
+      this.chartService.clearAll();
+    })
   }
 }

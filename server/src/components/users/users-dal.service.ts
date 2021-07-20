@@ -54,7 +54,11 @@ export class UsersDalService {
     }
 
     async getUser(username: string) {
-        return this.sqlite.db.run(SQL.user_getUsername, [username]);
+        return this.sqlite.db.get(SQL.user_getUsername, [username]);
+    }
+
+    async getAllUsers(userId: any) {
+        return this.sqlite.db.all(SQL.user_getAllAcceptCurrent, [userId]);
     }
 
     buildUserObject(row: any) {

@@ -1,6 +1,6 @@
 .notifications-container{
-  background-color: #b4b0ad;
-  width: 20%;
+  background-color: #f3f1ef;
+  width: 250px;
   height: 25%;
   position: absolute;
   transform: translateY(20px);
@@ -10,7 +10,7 @@
 .arrow{
   width: 20px;
   height: 20px;
-  background-color: #b4b0ad;
+  background-color: #f3f1ef;
   transform: translate(130%, -50%) rotate(45deg);
 }
 
@@ -36,10 +36,11 @@
   align-items: center;
 }
 
-.accept-btn{
-  background: #AED581;
+::ng-deep.p-button.p-button-icon-only.p-button-rounded{
+  height: 3.5rem;
+  width: 3.5rem;
 }
 
-.decline-btn{
-  background: #EF5350;
+::ng-deep.accept-btn, .accept-btn:hover{
+  background-color: #AED581;
 }

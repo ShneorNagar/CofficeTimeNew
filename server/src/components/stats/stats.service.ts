@@ -21,7 +21,7 @@ export class StatsService {
         return objectsArray;
     }
 
-    async getAllUserCups(userId: string) {
+    async getUserData(userId: string) {
         try {
             const ordersCalls = this.buildArrayFromDBObject(await this.statsDalService.getUserOrderCalls(userId));
             const ordersAccepts = this.buildArrayFromDBObject(await this.statsDalService.getOrderAccepts(userId));

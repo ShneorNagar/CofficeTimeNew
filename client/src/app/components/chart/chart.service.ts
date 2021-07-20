@@ -1,104 +1,140 @@
 import {Injectable} from '@angular/core';
 import {HttpService} from "../../services/http/http.service";
 import {LocalUserService} from "../../services/local-storage/local-user.service";
-import {CupSummary, Order} from "./chart.entity";
+import {ChartData, ICupSummary, Order} from "./chart.entity";
 import {ChartUtils} from "./chart.utils";
+import {HttpResponse} from "../../services/http/http-response";
+
+enum ChartBuildStatusEnum {
+  CREATE, UPDATE
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChartService {
 
-  chartYear;
-  chartMonth;
+  private readonly YEAR: string;
 
+  private readonly MONTH: string;
   private SERVER_CHART_URL = 'chart'
+
+  private allOrders;
   private ordersCalls: number;
   private ordersAccepts: number;
   private cupsSum: number;
+  private chartNames: Set<string> = new Set<string>();
 
-  private allOrders;
+  chartYearData: ChartData;
+  chartMonthData: ChartData;
+  chartWeekData: ChartData;
+  charts: ChartData[] = [];
 
   constructor(private httpService: HttpService,
               private localUserService: LocalUserService) {
+    const date = new Date();
+    this.YEAR = date.getFullYear().toString();
+    this.MONTH = (date.getMonth() + 1).toString();
   }
 
   async init() {
     try {
       const userId = this.localUserService.getUser().user.userId;
-      const res = await this.httpService.sendGetRequest(`${this.SERVER_CHART_URL}/userCupsSum`, {userId});
-
+      const res = await this.getUserData(userId);
       this.allOrders = res.value.ordersAccepts.concat(res.value.ordersCalls);
-      this.buildSumNumbers(res);
-      this.buildCharts()
-    } catch (err){
-      console.log(err);
+      this.buildOrdersSum(res);
+    } catch (err) {
+      console.error(err);
     }
   }
 
-  /**
-   * @param orders
-   * @param month - format: MM
-   * @param year - format: YYYY
-   * @return orders array filtered by date
-   */
-  filterByDate(orders: Order[], month: string, year: string): Order[]{
-    const regex = ChartService.generateRegex(month, year);
-    return orders.filter(order => order.time.match(regex));
+  getCharts(): ChartData[] {
+    return this.buildCharts(this.allOrders, ChartBuildStatusEnum.CREATE, 'blue');
   }
 
-  private static generateRegex(month: string, year: string){
+  async updateChartsByUserId(userId: string): Promise<ChartData[]> {
+    const res = await this.getUserData(userId);
+    this.allOrders = res.value.ordersAccepts.concat(res.value.ordersCalls);
+    return this.buildCharts(this.allOrders, ChartBuildStatusEnum.UPDATE, ChartUtils.getRandomColor());
+  }
+
+  private getUserData(userId: string): Promise<HttpResponse> {
+    return this.httpService.sendGetRequest(`${this.SERVER_CHART_URL}/userData`, {userId});
+  }
+
+  private buildCharts(orders: any[], status: ChartBuildStatusEnum, color: string): ChartData[] {
+    let charts: ChartData[] = [];
+
+    if (orders.length > 0 && this.validateChart(orders[0].username)) {
+      const ordersFilterByYear = this.filterByDate(orders, null, this.YEAR);
+      this.chartYearData = this.buildChartYear(ordersFilterByYear, status, color);
+      charts.unshift(this.chartYearData);
+
+      const ordersFilterByMonth = this.filterByDate(orders, this.MONTH, this.YEAR);
+      this.chartMonthData = this.buildChartMonth(ordersFilterByMonth, status, color);
+      charts.unshift(this.chartMonthData);
+
+      this.chartWeekData = this.buildChartWeek(orders, status, color);
+      charts.unshift(this.chartWeekData);
+    }
+    return charts;
+  }
+
+  private static generateRegex(month: string, year: string) {
     const regex = `.+${month ?? '[0-9]+'}\/[0-9]+\/${year ?? '[0-9]+'}`
     return new RegExp(regex, 'g');
   }
 
-  private buildSumNumbers(res){
+  private buildOrdersSum(res) {
     this.ordersCalls = res.value.ordersCalls.length;
     this.ordersAccepts = res.value.ordersAccepts.length;
     this.cupsSum = this.ordersCalls + this.ordersAccepts;
   }
 
-  private buildCharts() {
-    const date = new Date();
-    const YEAR: string = date.getFullYear().toString();
-    const MONTH: string = (date.getMonth() + 1).toString();
-
-    const ordersFilterByYear = this.filterByDate(this.allOrders,null, YEAR);
-    this.chartYear = this.buildChartYear(ordersFilterByYear);
-
-    const ordersFilterByMonth = this.filterByDate(this.allOrders, MONTH, YEAR);
-    this.chartMonth = this.buildChartMonth(ordersFilterByMonth);
-
-    this.buildChartWeek(ordersFilterByYear)
-  }
-
-  private buildChartWeek(orders: Order[]){
+  private buildChartWeek(orders: Order[], status: ChartBuildStatusEnum, color: string): ChartData {
     let datesOfLastWeek = this.getLastWeekDates();
     const datesKeys = Object.keys(datesOfLastWeek);
-    console.log(orders)
+
     orders.forEach(order => {
       let index = datesKeys.indexOf(order.time.split(' ')[1]);
-      if (index !== -1){
+      if (index !== -1) {
         datesOfLastWeek[datesKeys[index]]++;
       }
     })
-    console.log(datesOfLastWeek)
+
+    const xAxisValues = ChartUtils.getDayLabels(datesOfLastWeek);
+    const yAxisValues = Object.values(datesOfLastWeek);
+    const label = orders[0].username;
+    this.appendChartNames(label);
+    let dataset;
+    if (status === ChartBuildStatusEnum.CREATE) {
+      dataset = ChartUtils.buildDataset(yAxisValues, label, color);
+    } else {
+      dataset = ChartUtils.updateDataset(this.chartWeekData.chart.datasets, yAxisValues, label, color)
+    }
+    return new ChartData('Week', xAxisValues, dataset);
   }
 
-  private buildChartMonth(orders: Order[]){
+  private buildChartMonth(orders: Order[], status: ChartBuildStatusEnum, color: string): ChartData {
     let labels = ChartUtils.getMonthLabelsData();
-    orders.forEach(order =>{
+    orders.forEach(order => {
       let dayAsKey = ChartUtils.getDayFromDate(order.time);
       labels[dayAsKey]++;
     })
     const yAxisValues = Object.values(labels);
     const xAxisValues = Object.keys(ChartUtils.getMonthLabelsData());
-    const title = orders[0].username;
-    const color = '#bf42f5';
-    return ChartUtils.buildChartData(yAxisValues,xAxisValues, title, color);
+    const label = orders[0].username;
+    this.appendChartNames(label);
+    let dataset;
+    if (status === ChartBuildStatusEnum.CREATE) {
+      dataset = ChartUtils.buildDataset(yAxisValues, label, color);
+    } else {
+      dataset = ChartUtils.updateDataset(this.chartMonthData.chart.datasets, yAxisValues, label, color)
+    }
+    return new ChartData('Month', xAxisValues, dataset);
   }
 
-  private buildChartYear(orders: Order[]){
+  private buildChartYear(orders: Order[], status: ChartBuildStatusEnum, color: string): ChartData {
     let labels = ChartUtils.getYearLabelsData();
     orders.forEach(order => {
       let monthAsKey = ChartUtils.getMonthFromDate(order.time);
@@ -106,12 +142,18 @@ export class ChartService {
     })
     const yAxisValues = Object.values(labels);
     const xAxisValues = ChartUtils.getYearLabels();
-    const title = orders[0].username;
-    const color = '#42A5F5';
-    return ChartUtils.buildChartData(yAxisValues,xAxisValues, title, color);
+    const label = orders[0].username;
+    this.appendChartNames(label);
+    let dataset;
+    if (status === ChartBuildStatusEnum.CREATE) {
+      dataset = ChartUtils.buildDataset(yAxisValues, label, color);
+    } else {
+      dataset = ChartUtils.updateDataset(this.chartYearData.chart.datasets, yAxisValues, label, color)
+    }
+    return new ChartData('Year', xAxisValues, dataset);
   }
 
-  getCupsSummary(): CupSummary[] {
+  getCupsSummary(): ICupSummary[] {
     return [
       {
         count: this.ordersCalls,
@@ -128,28 +170,28 @@ export class ChartService {
     ]
   }
 
-  private getLastWeekDates(): {date: string, amount: number} {
+  private getLastWeekDates() {
 
     const date = new Date()
-    let day = 1;
-    let month = 7;
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
     let year = date.getFullYear();
     let dates = [];
 
-    while (dates.length <= 6){
+    while (dates.length <= 6) {
       let date = `${month}/${day}/${year}`;
-      if (date && this.validateDate(day, month)){
-        dates.push(date);
+      if (date && this.validateDate(day, month)) {
+        dates.unshift(date);
       }
 
       day--;
-      if (!day){
+      if (!day) {
         day = 31;
         month--;
-        if (!month){
+        if (!month) {
           month = 12;
           year--;
-          if (!year){
+          if (!year) {
             year = new Date().getFullYear() - 1;
           }
         }
@@ -158,19 +200,45 @@ export class ChartService {
     return this.buildWeekObj(dates);
   }
 
+  /**
+   * @param orders
+   * @param month - format: MM
+   * @param year - format: YYYY
+   * @return orders array filtered by date
+   */
+  filterByDate(orders: Order[], month: string, year: string): Order[] {
+    const regex = ChartService.generateRegex(month, year);
+    return orders.filter(order => order.time.match(regex));
+  }
+
   private validateDate(day: number, month: number) {
     return day <= ChartUtils.getDaysOfMonths()[month];
   }
 
-  private buildWeekObj(dates: string[]){
+  private buildWeekObj(dates: string[]) {
     let datesAsObj;
     dates.forEach(date => {
       datesAsObj = {
         ...datesAsObj,
-        [date] : 0
+        [date]: 0
       }
     })
     return datesAsObj;
+  }
+
+  private appendChartNames(name: string) {
+    this.chartNames.add(name)
+  }
+
+  private validateChart(name) {
+    return !this.chartNames.has(name);
+  }
+
+  clearAll() {
+    this.chartWeekData = null;
+    this.chartMonthData = null;
+    this.chartYearData = null;
+    this.chartNames.clear();
   }
 }
 

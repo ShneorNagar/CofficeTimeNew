@@ -14,3 +14,10 @@
 .counter-value{
   font-size: 25px;
 }
+
+.chart-title{
+  text-align: center;
+  font-size: xx-large;
+  margin: 15px 0 5px 0;
+  border-bottom: 1px #a7a7a7 solid;
+}
