@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {PrimeNGConfig} from "primeng/api";
 import {DialogService} from "primeng/dynamicdialog";
 import {UserState} from "../../../shared/user.state";
@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit {
 
   user: any;
   showNotifications: boolean;
-  activeOrder: ActiveOrder;
+  @Input() activeOrder: ActiveOrder;
 
   constructor(private primengConfig: PrimeNGConfig,
               public dialogService: DialogService,
@@ -37,11 +37,6 @@ export class HeaderComponent implements OnInit {
     this.localUserService.userSub.subscribe(value => {
       this.user = value;
     })
-
-    this.configService.loadActiveOrder()
-      .then(order => {
-        this.activeOrder = order
-      })
   }
 
   public get state() {

@@ -43,13 +43,13 @@ export class OrderService {
     }
 
     async updateUserResponse(body): Promise<any | HttpErrorObject> {
-        this.logger.log(`updateUserResponse started. username: ${body.username}`, this.context)
+        this.logger.log(`updateUserResponse started. userId: ${body.userId}`, this.context)
         let userResponse = await this.orderDalService.getUserResponse(body);
         if (!userResponse) {
-            this.logger.log(`saving user response. username: ${body.username}`, this.context)
+            this.logger.log(`saving user response. userId: ${body.userId}`, this.context)
             return this.orderDalService.updateUserResponse(body);
         } else {
-            const message = `user responded already. username: ${body.username}`;
+            const message = `user responded already. userId: ${body.userId}`;
             this.logger.log(message, this.context)
             return Promise.reject(this.httpResponseService.buildErrorObj(message, HttpStatusCodeEnum.CONFLICT));
         }

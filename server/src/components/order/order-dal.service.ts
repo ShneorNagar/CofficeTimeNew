@@ -11,17 +11,17 @@ export class OrderDalService {
     }
 
     updateUserResponse(body: any) {
-        let username = body.username;
+        let userId = body.userId;
         let responseTime = this.orderUtils.getCurrDate();
         let responseValue = body.value;
         let ownerOrderId = body.orderId;
-        return this.sqlite.db.run(SQL.orders_responses_createNewResponse, [username, responseTime, responseValue, ownerOrderId]);
+        return this.sqlite.db.run(SQL.orders_responses_createNewResponse, [userId, responseTime, responseValue, ownerOrderId]);
     }
 
     getUserResponse(body: any) {
-        let username = body.userId;
+        let userId = body.userId;
         let ownerOrderId = body.orderId;
-        return this.sqlite.db.get(SQL.orders_responses_getRespondedUser, [username, ownerOrderId]);
+        return this.sqlite.db.get(SQL.orders_responses_getRespondedUser, [userId, ownerOrderId]);
     }
 
     getActiveOrder() {

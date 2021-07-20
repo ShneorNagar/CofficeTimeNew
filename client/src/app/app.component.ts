@@ -9,8 +9,9 @@ import {LocalUserService} from "./services/local-storage/local-user.service";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   title = 'CofficeTime';
+  activeOrder$;
 
   constructor(private pushService: PushNotificationsService,
               private configService: ConfigService,
@@ -22,5 +23,7 @@ export class AppComponent implements OnInit{
     await this.configService.loadAvatars();
     this.pushService.subscribeToNotifications();
     this.localUserService.refresh();
+
+    this.activeOrder$ = this.configService.loadActiveOrder();
   }
 }

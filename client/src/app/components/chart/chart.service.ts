@@ -62,10 +62,11 @@ export class ChartService {
     return this.httpService.sendGetRequest(`${this.SERVER_CHART_URL}/userData`, {userId});
   }
 
-  private buildCharts(orders: any[], status: ChartBuildStatusEnum, color: string): ChartData[] {
-    let charts: ChartData[] = [];
+  private buildCharts(orders: any[], status: ChartBuildStatusEnum, color: string): ChartData[]{
 
     if (orders.length > 0 && this.validateChart(orders[0].username)) {
+      let charts: ChartData[] = [];
+
       const ordersFilterByYear = this.filterByDate(orders, null, this.YEAR);
       this.chartYearData = this.buildChartYear(ordersFilterByYear, status, color);
       charts.unshift(this.chartYearData);
@@ -76,8 +77,9 @@ export class ChartService {
 
       this.chartWeekData = this.buildChartWeek(orders, status, color);
       charts.unshift(this.chartWeekData);
+
+      return charts;
     }
-    return charts;
   }
 
   private static generateRegex(month: string, year: string) {

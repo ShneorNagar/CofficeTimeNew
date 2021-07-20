@@ -12,13 +12,10 @@ import {Observable, Subscription} from "rxjs";
 })
 export class ChartComponent implements OnInit{
 
-  chartYear: ChartData;
-  chartMonth: ChartData;
-  chartWeek: ChartData;
-  charts: ChartData[] = [];
   cupsSummary: ICupSummary[];
+  charts: ChartData[] = [];
 
-  users: any[];
+  private users: any[];
   usersNames: any;
   selectedUser: string;
   placeholder: any;
@@ -45,6 +42,8 @@ export class ChartComponent implements OnInit{
 
   addChartData() {
     const user = this.users.find(user => user.username === this.selectedUser);
-    this.chartService.updateChartsByUserId(user.user_id).then((charts: ChartData[]) => this.charts = charts);
+    this.chartService.updateChartsByUserId(user.user_id).then((charts: ChartData[]) => {
+      if (charts.length > 0) this.charts = charts
+    });
   }
 }

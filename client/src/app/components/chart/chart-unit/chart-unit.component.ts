@@ -6,15 +6,11 @@ import {ChartData} from "../chart.entity";
   templateUrl: './chart-unit.component.html',
   styleUrls: ['./chart-unit.component.css']
 })
-export class ChartUnitComponent implements OnInit, OnChanges {
+export class ChartUnitComponent implements OnChanges {
 
-  // working only at first time
   @Input() charts: ChartData[];
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes);
