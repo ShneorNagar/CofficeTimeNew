@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {PrimeNGConfig} from "primeng/api";
 import {DialogService} from "primeng/dynamicdialog";
 import {UserState} from "../../../shared/user.state";
@@ -9,13 +9,14 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ActiveOrder, ConfigService} from "../../../services/config.service";
 import {ChartComponent} from "../../chart/chart.component";
 import {ChartService} from "../../chart/chart.service";
+import {ToastService} from "../../../services/toast.service";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css', '../../../shared/style/push-button.css']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnChanges {
 
   user: any;
   showNotifications: boolean;
@@ -28,7 +29,8 @@ export class HeaderComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private configService: ConfigService,
-              private chartService: ChartService) {
+              private chartService: ChartService,
+              private toastService: ToastService) {
   }
 
   ngOnInit(): void {
@@ -37,6 +39,12 @@ export class HeaderComponent implements OnInit {
     this.localUserService.userSub.subscribe(value => {
       this.user = value;
     })
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.activeOrder.currentValue){
+      this.toastService.displayInfoToast('there is a new order')
+    }
   }
 
   public get state() {

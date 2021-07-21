@@ -66,7 +66,8 @@
           <div *ngSwitchCase="drinkTypeEnum.COFFEE" class="form__group" style="width: 35%">
             <p-dropdown [options]="milkTypes"
                         [(ngModel)]="selectedMilkType"
-                        placeholder="Select a milk type"
+                        [placeholder]="placeholder"
+                        [dataKey]="'value'"
                         optionLabel="value"
                         [showClear]="true"
                         [formControlName]="'milk'">

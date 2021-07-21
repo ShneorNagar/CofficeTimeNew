@@ -34,8 +34,6 @@ export class Sqlite {
             let sql_create_subscriptions = `CREATE TABLE IF NOT EXISTS SUBSCRIPTIONS (subscription TEXT, username VARCHAR, user_id VARCHAR,
                                             FOREIGN KEY(user_id) REFERENCES user (user_id));`;
 
-            let sql_create_config = `CREATE TABLE IF NOT EXISTS CONFIG (PUSH_PUBLIC_KEY TEXT, PUSH_PRIVATE_KEY TEXT, ORDER_TIMEOUT INTEGER);`;
-
             this.logger.log('sqlite start to run scripts...', this.context);
 
             this.logger.log('sqlite: executing sql_create_user', this.context);
@@ -52,9 +50,6 @@ export class Sqlite {
 
             this.logger.log('sqlite: executing sql_create_subscriptions', this.context);
             sqlite.run(sql_create_subscriptions);
-
-            this.logger.log('sqlite: executing sql_create_config', this.context);
-            sqlite.run(sql_create_config);
 
         })
             .catch((err) => {

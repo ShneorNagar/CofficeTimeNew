@@ -44,7 +44,7 @@ export class UsersController {
             this.logger.log(`register started`, this.context);
             const user = await this.usersDalService.getUser(body.user.username);
 
-            if (user.username) {
+            if (user) {
                 const existMessage = `username: ${user.username} already exist.`;
                 this.logger.log(existMessage, this.context);
                 return this.httpResponseService.buildResponse(existMessage, HttpStatusCodeEnum.CONFLICT);

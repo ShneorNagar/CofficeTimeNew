@@ -12,6 +12,8 @@ import {LocalUserService} from "./services/local-storage/local-user.service";
 export class AppComponent implements OnInit {
   title = 'CofficeTime';
   activeOrder$;
+  THREE_MINUTES = 180000;
+  scheduleInterval;
 
   constructor(private pushService: PushNotificationsService,
               private configService: ConfigService,
@@ -25,5 +27,9 @@ export class AppComponent implements OnInit {
     this.localUserService.refresh();
 
     this.activeOrder$ = this.configService.loadActiveOrder();
+    this.scheduleInterval = setInterval(() => {
+      console.log('checking for new orders.')
+      this.activeOrder$ = this.configService.loadActiveOrder();
+    }, this.THREE_MINUTES)
   }
 }
