@@ -1,12 +1,12 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MenuItem} from "primeng/api";
-import {LocalUserService} from "../../../services/local-storage/local-user.service";
-import {UserState} from "../../../shared/user.state";
-import {UserEditComponent} from "../../user-registration/user-edit/user-edit.component";
+import {LocalUserService} from "../../services/local-storage/local-user.service";
+import {UserState} from "../../shared/user.state";
+import {UserEditComponent} from "../user-registration/user-edit/user-edit.component";
 import {DialogService} from "primeng/dynamicdialog";
-import {UserService} from "../../user-registration/user.service";
-import {UserEntity} from "../../../shared/entities/user-entity";
-import {ConfigService} from "../../../services/config.service";
+import {UserService} from "../user-registration/user.service";
+import {UserEntity} from "../../shared/entities/user-entity";
+import {ConfigService} from "../../services/config.service";
 
 @Component({
   selector: 'app-user-avatar',

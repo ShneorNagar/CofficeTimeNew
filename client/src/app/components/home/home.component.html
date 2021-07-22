@@ -2,17 +2,17 @@
   <div class="app-item">
 
     <video autoplay muted loop id="backgroundVideo">
-      <source src="../../../../assets/videoBackground/CofficeTimebackground.mp4" type="video/mp4">
+      <source src="../../../assets/videoBackground/CofficeTimebackground.mp4" type="video/mp4">
     </video>
 
     <div class="btn-shape">
       <div class="flip-btn-inner flip-btn-front-btn" [appFlip]="isOrderSent">
         <div (click)="startNewOrder()" class="flip-btn-front" >
           <div>
-            <img src="../../../../assets/icons/order-coffee.jpg" alt="order-coffee" class="btn-img">
+            <img src="../../../assets/icons/order-coffee.jpg" alt="order-coffee" class="btn-img">
           </div>
           <div class="flip-btn-back btn-shape">
-            <img alt="stopwatch" src="assets/icons/stopwatch.png" class="btn-img">
+            <img alt="stopwatch" src="../../../assets/icons/stopwatch.png" class="btn-img">
           </div>
         </div>
       </div>
@@ -21,7 +21,7 @@
     <div class="facts-container">
       <div class="facts-header">
         <span>הידעת</span>
-        <img alt="lightbulb" src="../../../../assets/icons/lightbulb.png">
+        <img alt="lightbulb" src="../../../assets/icons/lightbulb.png">
       </div>
       <p class="facts-text facts-title">{{currFact.title}}</p>
       <hr>
@@ -30,9 +30,9 @@
 
     <div class="made-with">
       <span>Made with</span>
-      <img alt="coffee" class="made-with-img" src="../../../../assets/icons/icons8-cafe-48.png">
+      <img alt="coffee" class="made-with-img" src="../../../assets/icons/icons8-cafe-48.png">
       <span>and</span>
-      <img alt="heart" class="made-with-img" src="../../../../assets/icons/icons8-pixel-heart-48.png">
+      <img alt="heart" class="made-with-img" src="../../../assets/icons/icons8-pixel-heart-48.png">
       <span>By</span>
       <a href="https://github.com/ShneorNagar">Shneor Nagar</a>
     </div>

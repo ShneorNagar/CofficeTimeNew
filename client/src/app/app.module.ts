@@ -23,19 +23,18 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 import {UserDataComponent} from './components/user-registration/user-data/user-data.component';
 import {PreferencesComponent} from './components/user-registration/user-preferences/user-preferences.component';
-import {HeaderComponent} from './components/main/header/header.component';
+import {HeaderComponent} from './components/header/header.component';
 import {UserEditComponent} from './components/user-registration/user-edit/user-edit.component';
 import {AppComponent} from './app.component';
-import {UserResponseComponent} from './components/user-response/user-response.component';
 import {OrdersService} from "./services/orders.service";
 import {WebSocketService} from "./services/web-socket/web-socket.service";
-import {HomeComponent} from './components/main/home/home.component';
-import {HomeFlipDirective} from './components/main/home/home-flip.directive';
+import {HomeComponent} from './components/home/home.component';
+import {HomeFlipDirective} from './components/home/home-flip.directive';
 import {ChartComponent} from './components/chart/chart.component';
 import {TooltipModule} from "primeng/tooltip";
-import {UserAvatarBannerComponent} from './components/main/user-avatar/user-avatar-banner.component';
+import {UserAvatarBannerComponent} from './components/user-avatar/user-avatar-banner.component';
 import { UserAvatarComponent } from './components/user-registration/user-preferences/user-avatar/user-avatar.component';
-import { NotificationsComponent } from './components/main/notifications/notifications.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
 import { ChartUnitComponent } from './components/chart/chart-unit/chart-unit.component';
 
 @NgModule({
@@ -45,7 +44,6 @@ import { ChartUnitComponent } from './components/chart/chart-unit/chart-unit.com
     UserDataComponent,
     PreferencesComponent,
     UserEditComponent,
-    UserResponseComponent,
     HomeComponent,
     HomeFlipDirective,
     ChartComponent,

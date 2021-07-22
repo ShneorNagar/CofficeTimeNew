@@ -1,10 +1,11 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ChartData} from "../chart.entity";
 
 @Component({
   selector: 'app-chart-unit',
   templateUrl: './chart-unit.component.html',
-  styleUrls: ['./chart-unit.component.css']
+  styleUrls: ['./chart-unit.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ChartUnitComponent implements OnChanges {
 

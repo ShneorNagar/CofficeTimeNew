@@ -1,12 +1,13 @@
-import {Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {CoffeeFactsData} from "./coffee-facts-data";
-import {WebSocketService} from "../../../services/web-socket/web-socket.service";
-import {OrdersService} from "../../../services/orders.service";
+import {WebSocketService} from "../../services/web-socket/web-socket.service";
+import {OrdersService} from "../../services/orders.service";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent {
 

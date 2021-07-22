@@ -1,14 +1,15 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {ActiveOrder} from "../../../services/config.service";
-import {UserResponseEnum} from "../../user-response/user-response.enum";
-import {UserEntity} from "../../../shared/entities/user-entity";
-import {HttpService} from "../../../services/http/http.service";
-import {LocalUserService} from "../../../services/local-storage/local-user.service";
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {ActiveOrder} from "../../services/config.service";
+import {UserResponseEnum} from "../../shared/user-response.enum";
+import {UserEntity} from "../../shared/entities/user-entity";
+import {HttpService} from "../../services/http/http.service";
+import {LocalUserService} from "../../services/local-storage/local-user.service";
 
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
-  styleUrls: ['./notifications.component.css']
+  styleUrls: ['./notifications.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotificationsComponent implements OnChanges{
 

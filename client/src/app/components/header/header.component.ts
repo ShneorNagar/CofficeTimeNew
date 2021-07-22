@@ -1,20 +1,21 @@
-import {Component, HostListener, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, Component, HostListener, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {PrimeNGConfig} from "primeng/api";
 import {DialogService} from "primeng/dynamicdialog";
-import {UserState} from "../../../shared/user.state";
-import {UserEditComponent} from "../../user-registration/user-edit/user-edit.component";
-import {UserService} from "../../user-registration/user.service";
-import {LocalUserService} from "../../../services/local-storage/local-user.service";
+import {UserState} from "../../shared/user.state";
+import {UserEditComponent} from "../user-registration/user-edit/user-edit.component";
+import {UserService} from "../user-registration/user.service";
+import {LocalUserService} from "../../services/local-storage/local-user.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import {ActiveOrder, ConfigService} from "../../../services/config.service";
-import {ChartComponent} from "../../chart/chart.component";
-import {ChartService} from "../../chart/chart.service";
-import {ToastService} from "../../../services/toast.service";
+import {ActiveOrder, ConfigService} from "../../services/config.service";
+import {ChartComponent} from "../chart/chart.component";
+import {ChartService} from "../chart/chart.service";
+import {ToastService} from "../../services/toast.service";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css', '../../../shared/style/push-button.css']
+  styleUrls: ['./header.component.css', '../../shared/style/push-button.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent implements OnInit, OnChanges {
 
