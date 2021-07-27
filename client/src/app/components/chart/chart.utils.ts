@@ -122,9 +122,9 @@ export class ChartUtils {
     }]
   }
 
-  static updateDataset(originalDataset, yAxisData, label, color){
+  static updateDataset(dataset, yAxisData, label, color){
     return [
-      ...originalDataset,
+      ...dataset,
       {
         label,
         data: yAxisData,

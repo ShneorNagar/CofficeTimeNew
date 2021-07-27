@@ -49,33 +49,33 @@ export class ChartService {
   }
 
   getCharts(): ChartData[] {
-    return this.buildCharts(this.allOrders, ChartBuildStatusEnum.CREATE, 'blue');
+    return this.buildCharts(this.allOrders, 'blue');
   }
 
   async updateChartsByUserId(userId: string): Promise<ChartData[]> {
     const res = await this.getUserData(userId);
     this.allOrders = res.value.ordersAccepts.concat(res.value.ordersCalls);
-    return this.buildCharts(this.allOrders, ChartBuildStatusEnum.UPDATE, ChartUtils.getRandomColor());
+    return this.buildCharts(this.allOrders, ChartUtils.getRandomColor());
   }
 
   private getUserData(userId: string): Promise<HttpResponse> {
     return this.httpService.sendGetRequest(`${this.SERVER_CHART_URL}/userData`, {userId});
   }
 
-  private buildCharts(orders: any[], status: ChartBuildStatusEnum, color: string): ChartData[]{
+  private buildCharts(orders: any[], color: string): ChartData[]{
 
     if (orders.length > 0 && this.validateChart(orders[0].username)) {
       let charts: ChartData[] = [];
 
       const ordersFilterByYear = this.filterByDate(orders, null, this.YEAR);
-      this.chartYearData = this.buildChartYear(ordersFilterByYear, status, color);
+      this.chartYearData = this.buildChartYear(ordersFilterByYear, color);
       charts.unshift(this.chartYearData);
 
       const ordersFilterByMonth = this.filterByDate(orders, this.MONTH, this.YEAR);
-      this.chartMonthData = this.buildChartMonth(ordersFilterByMonth, status, color);
+      this.chartMonthData = this.buildChartMonth(ordersFilterByMonth, color);
       charts.unshift(this.chartMonthData);
 
-      this.chartWeekData = this.buildChartWeek(orders, status, color);
+      this.chartWeekData = this.buildChartWeek(orders, color);
       charts.unshift(this.chartWeekData);
 
       return charts;
@@ -93,7 +93,7 @@ export class ChartService {
     this.cupsSum = this.ordersCalls + this.ordersAccepts;
   }
 
-  private buildChartWeek(orders: Order[], status: ChartBuildStatusEnum, color: string): ChartData {
+  private buildChartWeek(orders: Order[], color: string): ChartData {
     let datesOfLastWeek = this.getLastWeekDates();
     const datesKeys = Object.keys(datesOfLastWeek);
 
@@ -109,15 +109,12 @@ export class ChartService {
     const label = orders[0].username;
     this.appendChartNames(label);
     let dataset;
-    if (status === ChartBuildStatusEnum.CREATE) {
-      dataset = ChartUtils.buildDataset(yAxisValues, label, color);
-    } else {
-      dataset = ChartUtils.updateDataset(this.chartWeekData.chart.datasets, yAxisValues, label, color)
-    }
+
+    dataset = ChartUtils.updateDataset(this.chartWeekData?.chart?.datasets ?? [], yAxisValues, label, color)
     return new ChartData('Week', xAxisValues, dataset);
   }
 
-  private buildChartMonth(orders: Order[], status: ChartBuildStatusEnum, color: string): ChartData {
+  private buildChartMonth(orders: Order[], color: string): ChartData {
     let labels = ChartUtils.getMonthLabelsData();
     orders.forEach(order => {
       let dayAsKey = ChartUtils.getDayFromDate(order.time);
@@ -128,15 +125,11 @@ export class ChartService {
     const label = orders[0].username;
     this.appendChartNames(label);
     let dataset;
-    if (status === ChartBuildStatusEnum.CREATE) {
-      dataset = ChartUtils.buildDataset(yAxisValues, label, color);
-    } else {
-      dataset = ChartUtils.updateDataset(this.chartMonthData.chart.datasets, yAxisValues, label, color)
-    }
+    dataset = ChartUtils.updateDataset(this.chartMonthData?.chart?.datasets ?? [], yAxisValues, label, color)
     return new ChartData('Month', xAxisValues, dataset);
   }
 
-  private buildChartYear(orders: Order[], status: ChartBuildStatusEnum, color: string): ChartData {
+  private buildChartYear(orders: Order[], color: string): ChartData {
     let labels = ChartUtils.getYearLabelsData();
     orders.forEach(order => {
       let monthAsKey = ChartUtils.getMonthFromDate(order.time);
@@ -147,11 +140,7 @@ export class ChartService {
     const label = orders[0].username;
     this.appendChartNames(label);
     let dataset;
-    if (status === ChartBuildStatusEnum.CREATE) {
-      dataset = ChartUtils.buildDataset(yAxisValues, label, color);
-    } else {
-      dataset = ChartUtils.updateDataset(this.chartYearData.chart.datasets, yAxisValues, label, color)
-    }
+    dataset = ChartUtils.updateDataset(this.chartYearData?.chart?.datasets ?? [], yAxisValues, label, color)
     return new ChartData('Year', xAxisValues, dataset);
   }
 
