@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {ChartService} from "./chart.service";
-import {ICupSummary, IChart, ChartData} from "./chart.entity";
+import {ICupSummary, ChartData} from "./chart.entity";
 import {ConfigService} from "../../services/config.service";
 import {LocalUserService} from "../../services/local-storage/local-user.service";
-import {Observable, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-chart',

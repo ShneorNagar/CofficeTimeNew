@@ -1,5 +1,3 @@
-import {IChart} from "./chart.entity";
-
 export class ChartUtils {
 
   static getYearLabels() {
@@ -98,30 +96,6 @@ export class ChartUtils {
     return dates;
   }
 
-  static buildChartData(yAxisData, xAxisData, label, color): IChart {
-    return {
-      labels: xAxisData,
-      responsive: true,
-      datasets: [
-        {
-          label,
-          data: yAxisData,
-          fill: false,
-          borderColor: color
-        }
-      ]
-    }
-  }
-
-  static buildDataset(yAxisData, label, color){
-    return [{
-      label,
-      data: yAxisData,
-      fill: false,
-      borderColor: color
-    }]
-  }
-
   static updateDataset(dataset, yAxisData, label, color){
     return [
       ...dataset,
@@ -154,4 +128,50 @@ export class ChartUtils {
     }
     return color;
   }
+
+  static getLastWeekDates() {
+
+    const date = new Date()
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let dates = [];
+
+    while (dates.length <= 6) {
+      let date = `${month}/${day}/${year}`;
+      if (date && this.validateDate(day, month)) {
+        dates.unshift(date);
+      }
+
+      day--;
+      if (!day) {
+        day = 31;
+        month--;
+        if (!month) {
+          month = 12;
+          year--;
+          if (!year) {
+            year = new Date().getFullYear() - 1;
+          }
+        }
+      }
+    }
+    return this.buildWeekObj(dates);
+  }
+
+  private static validateDate(day: number, month: number) {
+    return day <= ChartUtils.getDaysOfMonths()[month];
+  }
+
+  private static buildWeekObj(dates: string[]) {
+    let datesAsObj;
+    dates.forEach(date => {
+      datesAsObj = {
+        ...datesAsObj,
+        [date]: 0
+      }
+    })
+    return datesAsObj;
+  }
+
 }

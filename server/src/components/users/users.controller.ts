@@ -79,6 +79,11 @@ export class UsersController {
         }
     }
 
+    /**
+     *
+     * @param req
+     * @Return all users accept selected
+     */
     @Get('allUsers')
     async getAllUsers(@Req() req){
         const userId = req.query.userId;

@@ -5,8 +5,10 @@ import {ChartData, ICupSummary, Order} from "./chart.entity";
 import {ChartUtils} from "./chart.utils";
 import {HttpResponse} from "../../services/http/http-response";
 
-enum ChartBuildStatusEnum {
-  CREATE, UPDATE
+enum ChartTitleEnum {
+  YEAR = 'Year',
+  MONTH = 'Month',
+  WEEK = 'Week'
 }
 
 @Injectable({
@@ -15,8 +17,8 @@ enum ChartBuildStatusEnum {
 export class ChartService {
 
   private readonly YEAR: string;
-
   private readonly MONTH: string;
+  private readonly MAIN_CHART_COLOR = '#7014C1FF';
   private SERVER_CHART_URL = 'chart'
 
   private allOrders;
@@ -49,7 +51,7 @@ export class ChartService {
   }
 
   getCharts(): ChartData[] {
-    return this.buildCharts(this.allOrders, 'blue');
+    return this.buildCharts(this.allOrders, this.MAIN_CHART_COLOR);
   }
 
   async updateChartsByUserId(userId: string): Promise<ChartData[]> {
@@ -82,19 +84,47 @@ export class ChartService {
     }
   }
 
-  private static generateRegex(month: string, year: string) {
-    const regex = `.+${month ?? '[0-9]+'}\/[0-9]+\/${year ?? '[0-9]+'}`
-    return new RegExp(regex, 'g');
-  }
-
   private buildOrdersSum(res) {
     this.ordersCalls = res.value.ordersCalls.length;
     this.ordersAccepts = res.value.ordersAccepts.length;
     this.cupsSum = this.ordersCalls + this.ordersAccepts;
   }
 
+  /**
+   *  Chart builders section
+   * */
+  private buildChartYear(orders: Order[], color: string): ChartData {
+    let labels = ChartUtils.getYearLabelsData();
+    orders.forEach(order => {
+      let monthAsKey = ChartUtils.getMonthFromDate(order.time);
+      labels[monthAsKey]++;
+    })
+    const yAxisValues = Object.values(labels);
+    const xAxisValues = ChartUtils.getYearLabels();
+    const label = orders[0].username;
+    this.appendChartNames(label);
+    let dataset;
+    dataset = ChartUtils.updateDataset(this.chartYearData?.chart?.datasets ?? [], yAxisValues, label, color)
+    return new ChartData(ChartTitleEnum.YEAR, xAxisValues, dataset);
+  }
+
+  private buildChartMonth(orders: Order[], color: string): ChartData {
+    let labels = ChartUtils.getMonthLabelsData();
+    orders.forEach(order => {
+      let dayAsKey = ChartUtils.getDayFromDate(order.time);
+      labels[dayAsKey]++;
+    })
+    const yAxisValues = Object.values(labels);
+    const xAxisValues = Object.keys(ChartUtils.getMonthLabelsData());
+    const label = orders[0].username;
+    this.appendChartNames(label);
+    let dataset;
+    dataset = ChartUtils.updateDataset(this.chartMonthData?.chart?.datasets ?? [], yAxisValues, label, color)
+    return new ChartData(ChartTitleEnum.MONTH, xAxisValues, dataset);
+  }
+
   private buildChartWeek(orders: Order[], color: string): ChartData {
-    let datesOfLastWeek = this.getLastWeekDates();
+    let datesOfLastWeek = ChartUtils.getLastWeekDates();
     const datesKeys = Object.keys(datesOfLastWeek);
 
     orders.forEach(order => {
@@ -111,37 +141,12 @@ export class ChartService {
     let dataset;
 
     dataset = ChartUtils.updateDataset(this.chartWeekData?.chart?.datasets ?? [], yAxisValues, label, color)
-    return new ChartData('Week', xAxisValues, dataset);
+    return new ChartData(ChartTitleEnum.WEEK, xAxisValues, dataset);
   }
 
-  private buildChartMonth(orders: Order[], color: string): ChartData {
-    let labels = ChartUtils.getMonthLabelsData();
-    orders.forEach(order => {
-      let dayAsKey = ChartUtils.getDayFromDate(order.time);
-      labels[dayAsKey]++;
-    })
-    const yAxisValues = Object.values(labels);
-    const xAxisValues = Object.keys(ChartUtils.getMonthLabelsData());
-    const label = orders[0].username;
-    this.appendChartNames(label);
-    let dataset;
-    dataset = ChartUtils.updateDataset(this.chartMonthData?.chart?.datasets ?? [], yAxisValues, label, color)
-    return new ChartData('Month', xAxisValues, dataset);
-  }
-
-  private buildChartYear(orders: Order[], color: string): ChartData {
-    let labels = ChartUtils.getYearLabelsData();
-    orders.forEach(order => {
-      let monthAsKey = ChartUtils.getMonthFromDate(order.time);
-      labels[monthAsKey]++;
-    })
-    const yAxisValues = Object.values(labels);
-    const xAxisValues = ChartUtils.getYearLabels();
-    const label = orders[0].username;
-    this.appendChartNames(label);
-    let dataset;
-    dataset = ChartUtils.updateDataset(this.chartYearData?.chart?.datasets ?? [], yAxisValues, label, color)
-    return new ChartData('Year', xAxisValues, dataset);
+  private static generateRegex(month: string, year: string) {
+    const regex = `.+${month ?? '[0-9]+'}\/[0-9]+\/${year ?? '[0-9]+'}`
+    return new RegExp(regex, 'g');
   }
 
   getCupsSummary(): ICupSummary[] {
@@ -161,36 +166,6 @@ export class ChartService {
     ]
   }
 
-  private getLastWeekDates() {
-
-    const date = new Date()
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-    let dates = [];
-
-    while (dates.length <= 6) {
-      let date = `${month}/${day}/${year}`;
-      if (date && this.validateDate(day, month)) {
-        dates.unshift(date);
-      }
-
-      day--;
-      if (!day) {
-        day = 31;
-        month--;
-        if (!month) {
-          month = 12;
-          year--;
-          if (!year) {
-            year = new Date().getFullYear() - 1;
-          }
-        }
-      }
-    }
-    return this.buildWeekObj(dates);
-  }
-
   /**
    * @param orders
    * @param month - format: MM
@@ -200,21 +175,6 @@ export class ChartService {
   filterByDate(orders: Order[], month: string, year: string): Order[] {
     const regex = ChartService.generateRegex(month, year);
     return orders.filter(order => order.time.match(regex));
-  }
-
-  private validateDate(day: number, month: number) {
-    return day <= ChartUtils.getDaysOfMonths()[month];
-  }
-
-  private buildWeekObj(dates: string[]) {
-    let datesAsObj;
-    dates.forEach(date => {
-      datesAsObj = {
-        ...datesAsObj,
-        [date]: 0
-      }
-    })
-    return datesAsObj;
   }
 
   private appendChartNames(name: string) {
