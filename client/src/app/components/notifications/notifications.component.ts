@@ -1,4 +1,13 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {ActiveOrder} from "../../services/config.service";
 import {UserResponseEnum} from "../../shared/user-response.enum";
 import {UserEntity} from "../../shared/entities/user-entity";
@@ -14,6 +23,14 @@ import {LocalUserService} from "../../services/local-storage/local-user.service"
 export class NotificationsComponent implements OnChanges{
 
   private SERVER_RESPONSE_PATH = 'orders/response';
+  @Output() toggleShowNotifications: EventEmitter<any> = new EventEmitter<any>();
+
+  @HostListener('click', ['$event.target'])
+  onClick(el) {
+    if (el.id == 'notif-wrapper'){
+      this.toggleShowNotifications.emit();
+    }
+  }
 
   @Output() responseSent: EventEmitter<any> = new EventEmitter();
   @Input() order: ActiveOrder;
@@ -31,9 +48,12 @@ export class NotificationsComponent implements OnChanges{
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.order = changes['order'].currentValue
-    this.title = !!this.order ? `new order from ${this.order.username}` : 'no orders found'
-    this.isOrderActive = !!this.order;
+    const order = changes['order'];
+    if (order) {
+      this.order = order.currentValue
+      this.title = !!this.order ? `new order from ${this.order.username}` : 'no orders found'
+      this.isOrderActive = !!this.order;
+    }
   }
 
   accept() {

@@ -27,7 +27,7 @@
             class="p-button-raised p-button-text p-button-plain header-button">
     </button>
 
-    <app-notifications *ngIf="showNotifications" (responseSent)="toggleNotifications()" [order]="activeOrder"></app-notifications>
+    <app-notifications *ngIf="showNotifications" (toggleShowNotifications)="toggleNotifications()" (responseSent)="toggleNotifications()" [order]="activeOrder"></app-notifications>
   </div>
 
   <div class="buttons-container" style="margin-right: 10px">

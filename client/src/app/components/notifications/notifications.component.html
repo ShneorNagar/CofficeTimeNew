@@ -1,11 +1,13 @@
-<div class="notifications-container">
-  <div class="arrow"></div>
-  <div class="content">
-    <div class="title">
-      <span>{{title}}</span>
+<div class="wrapper" id="notif-wrapper">
+  <div class="notifications-container">
+    <div class="arrow"></div>
+    <div class="content">
+      <div class="title">
+        <span>{{title}}</span>
+      </div>
+      <div class="br"></div>
+      <div *ngIf="isOrderActive then btnSet else notificationsImage"></div>
     </div>
-    <div class="br"></div>
-    <div *ngIf="isOrderActive then btnSet else notificationsImage"></div>
   </div>
 </div>
 
