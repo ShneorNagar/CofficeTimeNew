@@ -1,5 +1,5 @@
 import {Injectable} from "@nestjs/common";
-import {UserDTO, UserEntity} from "../../shared/user-entity";
+import {UserDTO, UserDto} from "../../shared/user-dto";
 import {SQL} from '../../../public/DB/sql-commands'
 import {Sqlite} from "../../../public/DB/db";
 
@@ -9,12 +9,12 @@ export class UsersDalService {
     constructor(private sqlite: Sqlite) {
     }
 
-    async updateUser(data: UserEntity): Promise<any> {
+    async updateUser(data: UserDto): Promise<any> {
         const updateUserParams = [data.user.username, data.user.userId]
         return this.sqlite.db.run(SQL.user_update, updateUserParams);
     }
 
-    async updatePreferences(data: UserEntity): Promise<any> {
+    async updatePreferences(data: UserDto): Promise<any> {
         const updatePreferencesParam = [
             data.preferences.coffee,
             data.preferences.tea,
@@ -34,13 +34,13 @@ export class UsersDalService {
         return this.sqlite.db.get(query, params);
     }
 
-    createUser(userId: string, userDto: UserEntity) {
+    createUser(userId: string, userDto: UserDto) {
         let createUserQuery = SQL.user_createUser;
         let createUserParams = [userId, userDto.user?.username, userDto.user?.password];
         return this.sqlite.db.run(createUserQuery, createUserParams);
     }
 
-    createPreference(userId: string, userDto: UserEntity) {
+    createPreference(userId: string, userDto: UserDto) {
 
         let preferenceParams = [userDto.preferences?.coffee,
             userDto.preferences?.tea,
@@ -76,6 +76,6 @@ export class UsersDalService {
                 drink_type: row['drink_type'],
                 avatar: row['avatar']
             }
-        } as UserEntity
+        } as UserDto
     }
 }

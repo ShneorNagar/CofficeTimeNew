@@ -1,5 +1,5 @@
 import {Injectable} from "@nestjs/common";
-import {HttpResponse} from "../../shared/user-entity";
+import {HttpResponse} from "../../shared/user-dto";
 import {HttpStatusCodeEnum} from "./http-status-code.enum";
 
 export interface HttpErrorObject {

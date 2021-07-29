@@ -1,4 +1,4 @@
-export class UserEntity {
+export class UserDto {
     user: UserDTO;
     preferences: PreferencesDTO;
 }

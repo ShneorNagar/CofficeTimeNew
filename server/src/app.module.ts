@@ -16,9 +16,21 @@ import {ConfigController} from "./config/config.controller";
 import {StatsController} from "./components/stats/stats.controller";
 import {StatsDalService} from "./components/stats/stats-dal.service";
 import {StatsService} from "./components/stats/stats.service";
+import {TypeOrmModule} from "@nestjs/typeorm";
+import {EntitiesModule} from "./entities/entities.module";
 
 @Module({
-    imports: [],
+    imports: [
+        TypeOrmModule.forRoot({
+            type: 'sqlite',
+            database: 'public/DB/database',
+            synchronize: true,
+            logging: 'all',
+            dropSchema: true, // todo false
+            entities: [__dirname + '/../**/*.entity{.ts,.js}']
+        }),
+        EntitiesModule
+    ],
     controllers: [
         UsersController,
         PushController,

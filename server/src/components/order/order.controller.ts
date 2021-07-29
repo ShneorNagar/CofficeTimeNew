@@ -5,7 +5,7 @@ import {PushService} from "../push/push.service";
 import {HttpResponseService} from "../../services/http/http-response.service";
 import {HttpStatusCodeEnum} from "../../services/http/http-status-code.enum";
 import {EVENT_TYPE, WebSocketPlasma} from "../../web-socket/event-gateway.app";
-import {UserDTO} from "../../shared/user-entity";
+import {UserDTO} from "../../shared/user-dto";
 
 @Controller('orders')
 export class OrderController {
