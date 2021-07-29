@@ -4,8 +4,8 @@ import {HttpResponse, UserDTO, UserDto} from "../../shared/user-dto";
 import {HttpResponseService} from "../../services/http/http-response.service";
 import {UUIDService} from "../../services/uuid-service";
 import {HttpStatusCodeEnum} from "../../services/http/http-status-code.enum";
-import {UserEntity} from "../../entities/user.entity";
-import {UserService} from "../../entities/user.service";
+import {UserEntity} from "../../entities/user/user.entity";
+import {UserService} from "../../entities/user/user.service";
 
 @Controller('users')
 export class UsersController {

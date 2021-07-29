@@ -27,7 +27,7 @@ import {EntitiesModule} from "./entities/entities.module";
             synchronize: true,
             logging: 'all',
             dropSchema: true, // todo false
-            entities: [__dirname + '/../**/*.entity{.ts,.js}']
+            entities: [__dirname + '/entities/**/*.entity{.ts,.js}']
         }),
         EntitiesModule
     ],
