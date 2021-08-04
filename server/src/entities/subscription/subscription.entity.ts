@@ -7,12 +7,13 @@ export class SubscriptionEntity {
     @PrimaryGeneratedColumn('increment', {name: 'id'})
     subscriptionId
 
-    @OneToOne(type => UserEntity) @JoinColumn({name: 'user_id'})
-    user: UserEntity;
-
     @Column()
     username: string
 
     @Column()
     subscription: string;
+
+    @OneToOne(type => UserEntity)
+    @JoinColumn({name: 'user_id'})
+    user: UserEntity;
 }

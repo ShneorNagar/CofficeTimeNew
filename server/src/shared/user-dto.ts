@@ -1,4 +1,4 @@
-export class UserDto {
+export class FullUserDTO {
     user: UserDTO;
     preferences: PreferencesDTO;
 }

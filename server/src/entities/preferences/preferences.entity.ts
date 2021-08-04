@@ -4,11 +4,18 @@ import {UserEntity} from "../user/user.entity";
 @Entity('PREFERENCES')
 export class PreferencesEntity {
 
+    constructor(coffee?: number, tea?: string, sugar?: number, milk?: string, note?: string, drinkType?: string, avatar?: string) {
+        this.coffee = coffee;
+        this.tea = tea;
+        this.sugar = sugar;
+        this.milk = milk;
+        this.note = note;
+        this.drinkType = drinkType;
+        this.avatar = avatar;
+    }
+
     @PrimaryGeneratedColumn('increment', {name: 'preferences_id'})
     preferencesId
-
-    @OneToOne(type => UserEntity) @JoinColumn({name: 'user_id'})
-    user: UserEntity;
 
     @Column({nullable: true})
     coffee: number;
@@ -32,4 +39,8 @@ export class PreferencesEntity {
 
     @Column({nullable: true})
     avatar: string
+
+    @OneToOne(type => UserEntity)
+    @JoinColumn({name: 'user_id'})
+    user: UserEntity;
 }

@@ -1,4 +1,5 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {OrderResponseEntity} from "../order-response/order-response.entity";
 
 @Entity('ORDERS')
 export class OrdersEntity {
@@ -14,4 +15,7 @@ export class OrdersEntity {
 
     @Column({name: 'order_time'})
     orderTime: string;
+
+    @OneToMany(type => OrderResponseEntity, orderResponse => orderResponse.order)
+    orderResponses: OrderResponseEntity;
 }

@@ -7,9 +7,6 @@ export class OrderResponseEntity {
     @PrimaryGeneratedColumn('increment')
     sequence: string;
 
-    @ManyToOne(type => OrdersEntity) @JoinColumn({name: 'order_id'})
-    order: OrdersEntity;
-
     @Column({name: 'response_time'})
     responseTime: string;
 
@@ -17,6 +14,6 @@ export class OrderResponseEntity {
     @Column({name: 'response_value'})
     responseValue: string;
 
-    @Column({name: 'order_id'})
-    ownerOrderId: string;
+    @ManyToOne(type => OrdersEntity, order => order.orderResponses)
+    order: OrdersEntity;
 }

@@ -26,7 +26,7 @@ import {EntitiesModule} from "./entities/entities.module";
             database: 'public/DB/database',
             synchronize: true,
             logging: 'all',
-            dropSchema: true, // todo false
+            // dropSchema: true, // todo false
             entities: [__dirname + '/entities/**/*.entity{.ts,.js}']
         }),
         EntitiesModule
@@ -44,8 +44,8 @@ import {EntitiesModule} from "./entities/entities.module";
         OrderDalService,
         OrderUtils,
         Sqlite,
-        HttpResponseService,
         UUIDService,
+        HttpResponseService,
         WebSocketPlasma,
         StatsDalService,
         StatsService],

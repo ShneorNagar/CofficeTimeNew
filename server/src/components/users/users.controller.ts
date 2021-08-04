@@ -1,16 +1,18 @@
-import {Body, Controller, Get, Logger, Post, Req} from "@nestjs/common";
+import {Body, Controller, Get, Logger, Post, Put, Req} from "@nestjs/common";
 import {UsersDalService} from "./users-dal.service";
-import {HttpResponse, UserDTO, UserDto} from "../../shared/user-dto";
+import {HttpResponse, UserDTO, FullUserDTO} from "../../shared/user-dto";
 import {HttpResponseService} from "../../services/http/http-response.service";
 import {UUIDService} from "../../services/uuid-service";
 import {HttpStatusCodeEnum} from "../../services/http/http-status-code.enum";
 import {UserEntity} from "../../entities/user/user.entity";
 import {UserService} from "../../entities/user/user.service";
+import {UpdateResult} from "typeorm";
 
 @Controller('users')
 export class UsersController {
 
-    constructor(private readonly userService: UserService) {
+    constructor(private readonly userService: UserService,
+                private httpResponseService: HttpResponseService) {
     }
 
     // private httpResponseService: HttpResponseService,
@@ -19,36 +21,38 @@ export class UsersController {
     private context = UsersController.name;
     private logger = new Logger(this.context);
 
-    @Get('test-get')
-    getTestUser(): Promise<UserEntity[]>{
-        return this.userService.findAll();
+    // done
+    @Post('login')
+    async getUserByNameAndPassword(@Body() user: UserDTO): Promise<HttpResponse> {
+        try {
+            const res = await this.userService.getUserByNameAndPassword(user.username, user.password);
+            if (res) {
+                const message = `user: ${user.username} fetched successfully`;
+                this.logger.log(message, this.context);
+                return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.OK, res);
+            } else {
+                const message = 'username or password are incorrect.';
+                this.logger.log(`${message} username: ${user.username}`, this.context);
+                return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.CONFLICT);
+            }
+        } catch (err) {
+            this.logger.error(err, this.context);
+            return this.httpResponseService.buildResponse(err, HttpStatusCodeEnum.INTERNAL_SERVER_ERROR);
+        }
     }
 
-    @Get('test-add')
-    addUser(): void{
-        return this.userService.addUser();
+    // done
+    @Put('update')
+    async updateUsernameById(@Body() user: UserDTO): Promise<any> {
+        const res =  await this.userService.updateUsernameById(user.username, user.userId);
+        return res.affected;
     }
 
-    // @Post('login')
-    // async logIn(@Body() userDTO: UserDTO): Promise<any> {
-    //     try {
-    //         this.logger.log(`logIn started`, this.context);
-    //         let logInRes = await this.usersDalService.logIn(userDTO)
-    //         if (logInRes) {
-    //             const userObjRes = this.usersDalService.buildUserObject(logInRes);
-    //             const message = `user: ${userDTO.username} fetched successfully`;
-    //             this.logger.log(message, this.context);
-    //             return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.OK, userObjRes);
-    //         } else {
-    //             const message = 'username or password are incorrect.';
-    //             this.logger.log(`${message} username: ${userDTO.username}`, this.context);
-    //             return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.CONFLICT);
-    //         }
-    //     } catch (err) {
-    //         this.logger.error(err, this.context);
-    //         return this.httpResponseService.buildResponse(err, HttpStatusCodeEnum.INTERNAL_SERVER_ERROR);
-    //     }
-    // }
+    @Post('register')
+    async register(@Body() body: FullUserDTO) {
+        const res = await this.userService.addUser(body);
+        return res;
+    }
 
     // @Post('register')
     // async register(@Body() body: UserDto) {
