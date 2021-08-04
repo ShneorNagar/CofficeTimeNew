@@ -50,8 +50,22 @@ export class UsersController {
 
     @Post('register')
     async register(@Body() body: FullUserDTO) {
-        const res = await this.userService.addUser(body);
-        return res;
+
+        try {
+            const user = await this.userService.getUserByName(body.user.username);
+            if (user) {
+                const existMessage = `username: ${body.user.username} already exist.`;
+                this.logger.log(existMessage, this.context);
+                return this.httpResponseService.buildResponse(existMessage, HttpStatusCodeEnum.CONFLICT);
+            }
+            const newUser = await this.userService.addUser(body);
+            const message = `user ${body.user.username} created successfully.`;
+            this.logger.log(message, this.context);
+            return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.CREATED, newUser);
+        } catch (err) {
+            this.logger.error(err, this.context);
+            return this.httpResponseService.buildResponse(err, HttpStatusCodeEnum.INTERNAL_SERVER_ERROR);
+        }
     }
 
     // @Post('register')

@@ -31,7 +31,9 @@ export class UserService {
             .execute();
     }
 
+    // done
     async addUser(body: FullUserDTO){
+        let userEntity = new UserEntity(body.user.username, body.user.password);
         let preferences = new PreferencesEntity(body.preferences.coffee,
             body.preferences.tea,
             body.preferences.sugar,
@@ -40,11 +42,10 @@ export class UserService {
             body.preferences.drink_type,
             body.preferences.avatar);
 
-        let userEntity = new UserEntity(body.user.username, body.user.password);
-
         await this.userRepository.save(userEntity);
         preferences.user = userEntity;
-        await getConnection().manager.save(preferences)
+        await getConnection().manager.save(preferences);
+        return body;
     }
 
 }
