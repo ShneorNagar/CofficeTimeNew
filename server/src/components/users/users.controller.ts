@@ -15,9 +15,6 @@ export class UsersController {
                 private httpResponseService: HttpResponseService) {
     }
 
-    // private httpResponseService: HttpResponseService,
-    // private uuidService: UUIDService,
-
     private context = UsersController.name;
     private logger = new Logger(this.context);
 
@@ -42,15 +39,8 @@ export class UsersController {
     }
 
     // done
-    @Put('update')
-    async updateUsernameById(@Body() user: UserDTO): Promise<any> {
-        const res =  await this.userService.updateUsernameById(user.username, user.userId);
-        return res.affected;
-    }
-
     @Post('register')
     async register(@Body() body: FullUserDTO) {
-
         try {
             const user = await this.userService.getUserByName(body.user.username);
             if (user) {
@@ -68,63 +58,48 @@ export class UsersController {
         }
     }
 
-    // @Post('register')
-    // async register(@Body() body: UserDto) {
-    //     const UUID = this.uuidService.generateUUID();
-    //     try {
-    //         this.logger.log(`register started`, this.context);
-    //         const user = await this.usersDalService.getUser(body.user.username);
-    //
-    //         if (user) {
-    //             const existMessage = `username: ${user.username} already exist.`;
-    //             this.logger.log(existMessage, this.context);
-    //             return this.httpResponseService.buildResponse(existMessage, HttpStatusCodeEnum.CONFLICT);
-    //         }
-    //
-    //         await this.usersDalService.createUser(UUID, body);
-    //         await this.usersDalService.createPreference(UUID, body);
-    //         let newUser = await this.usersDalService.logIn(body.user);
-    //         newUser = this.usersDalService.buildUserObject(newUser);
-    //         const message = `user ${body.user.username} created successfully.`;
-    //         this.logger.log(message, this.context);
-    //         return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.CREATED, newUser);
-    //     } catch (err) {
-    //         this.logger.error(err, this.context);
-    //         return this.httpResponseService.buildResponse(err, HttpStatusCodeEnum.INTERNAL_SERVER_ERROR)
-    //     }
-    // }
+    // done
+    // todo change method in client
+    @Put('update')
+    async update(@Body() body: FullUserDTO): Promise<any>{
+        try {
+            await this.userService.updateUser(body);
+            const message = `user: username: ${body.user.username} updated successfully.`
+            this.logger.log(message, this.context);
+            return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.CREATED, body)
+        } catch (err) {
+            this.logger.error(err, this.context);
+            return this.httpResponseService.buildResponse('error while updating user data', HttpStatusCodeEnum.INTERNAL_SERVER_ERROR, err);
+        }
+    }
 
-    // @Post('update')
-    // async update(@Body() body: UserDto): Promise<HttpResponse> {
-    //     try {
-    //         this.logger.log(`update started`, this.context);
-    //         await this.usersDalService.updateUser(body);
-    //         await this.usersDalService.updatePreferences(body);
-    //
-    //         const message = `user: username: ${body.user.username} with userId: ${body.user.userId} updated successfully.`
-    //         this.logger.log(message, this.context);
-    //         return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.CREATED, body)
-    //     } catch (err) {
-    //         this.logger.error(err, this.context);
-    //         return this.httpResponseService.buildResponse(err, HttpStatusCodeEnum.INTERNAL_SERVER_ERROR);
-    //     }
-    // }
+    @Get('all')
+    async getAllUsers(){
+        try {
+            const users = await this.userService.getAllUsers();
+            this.logger.log(`getAllUsers ended.`);
+            return this.httpResponseService.buildResponse(null, HttpStatusCodeEnum.OK, users);
+        } catch (err) {
+            this.logger.error(err, this.context);
+            return this.httpResponseService.buildResponse('error while fetching users', HttpStatusCodeEnum.INTERNAL_SERVER_ERROR, err);
+        }
+    }
 
-    // /**
-    //  *
-    //  * @param req
-    //  * @Return all users accept selected
-    //  */
-    // @Get('allUsers')
-    // async getAllUsers(@Req() req){
-    //     const userId = req.query.userId;
-    //     this.logger.log(`getAllUsers started. userId: ${userId}`, this.context);
-    //     try {
-    //         const users = await this.usersDalService.getAllUsers(userId);
-    //         this.logger.log(`getAllUsers ended.`);
-    //         return this.httpResponseService.buildResponse(null, HttpStatusCodeEnum.OK, users);
-    //     } catch (err){
-    //
-    //     }
+    // done
+    /**
+     *
+     * @param req
+     * @Return all users accept selected
+     */
+    @Get('allUsers')
+    getAllUsersAcceptGivenId(@Req() req){
+        const id = req.query.userId;
+        return this.userService.getAllUsersAcceptGivenId(id);
+    }
+
+    // @Get('all-and-pref-accept-given-id')
+    // getAllUsersAndPrefAcceptGivenId(@Req() req){
+    //     const id = req.query.userId;
+    //     return this.userService.getAllUsersAndPreferencesAcceptGivenId(id);
     // }
 }

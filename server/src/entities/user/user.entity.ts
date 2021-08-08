@@ -1,4 +1,5 @@
 import {Entity, PrimaryGeneratedColumn, Column, Unique, OneToOne, JoinColumn} from "typeorm";
+import {PreferencesEntity} from "../preferences/preferences.entity";
 
 @Entity('USER')
 @Unique(['username'])
@@ -17,4 +18,7 @@ export class UserEntity {
 
     @Column()
     password: string;
+
+    @OneToOne(type => PreferencesEntity)
+    preferences: PreferencesEntity;
 }

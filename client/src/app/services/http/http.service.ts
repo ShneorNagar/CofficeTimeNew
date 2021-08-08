@@ -1,6 +1,5 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {DialogService} from "primeng/dynamicdialog";
 import {HttpResponse} from "./http-response";
 import {HttpStatusCodeEnum} from "./http-status-code.enum";
 import {ToastService} from "../toast.service";
