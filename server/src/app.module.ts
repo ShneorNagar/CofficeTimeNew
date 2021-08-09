@@ -17,7 +17,7 @@ import {StatsController} from "./components/stats/stats.controller";
 import {StatsDalService} from "./components/stats/stats-dal.service";
 import {StatsService} from "./components/stats/stats.service";
 import {TypeOrmModule} from "@nestjs/typeorm";
-import {EntitiesModule} from "./entities/entities.module";
+import {OrmModule} from "./ORM/orm.module";
 
 @Module({
     imports: [
@@ -27,9 +27,9 @@ import {EntitiesModule} from "./entities/entities.module";
             synchronize: true,
             logging: 'all',
             // dropSchema: true, // todo false
-            entities: [__dirname + '/entities/**/*.entity{.ts,.js}']
+            entities: [__dirname + '/ORM/entities/*.entity{.ts,.js}']
         }),
-        EntitiesModule
+        OrmModule
     ],
     controllers: [
         UsersController,

@@ -1,14 +1,15 @@
 import {Injectable} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
-import {UserEntity} from "./user.entity";
-import {getConnection, Repository} from "typeorm";
+import {UserEntity} from "../entities/user.entity";
+import { getConnection, Repository} from "typeorm";
 import {FullUserDTO, PreferencesDTO, UserDTO} from "../../shared/user-dto";
-import {PreferencesEntity} from "../preferences/preferences.entity";
+import {PreferencesEntity} from "../entities/preferences.entity";
 
 @Injectable()
 export class UserService {
 
-    constructor(@InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>) {
+    constructor(@InjectRepository(UserEntity)
+                private readonly userRepository: Repository<UserEntity>) {
     }
 
     getUserByNameAndPassword(username: string, password: string): Promise<UserEntity> {
@@ -36,17 +37,23 @@ export class UserService {
             .getMany();
     }
 
-    // async getAllUsersAndPreferencesAcceptGivenId(id: string){
-    //     // this.userRepository.createQueryBuilder('user')
-    //     //     .leftJoinAndSelect('user.preferences', 'p')
-    //     //     .where('user.id != :id', {id})
-    //     //     .getMany()
-    //
-    //     return createQueryBuilder('user')
-    //         .leftJoinAndSelect('preferences', 'p')
-    //         .where('user.id = 2')
-    //         .getMany();
-    // }
+    async getAllUsersAndPreferencesAcceptGivenId(id: string) {
+        return this.userRepository
+            .createQueryBuilder('user')
+            .select(['user.username'])
+            .where('user.id != :id', {id})
+            .leftJoinAndSelect('user.preferences', 'p')
+            .getMany()
+    }
+
+    async getUserAndPreferencesById(id: string){
+        return this.userRepository
+            .createQueryBuilder('user')
+            .select(['user.username'])
+            .where('user.id = :id', {id})
+            .leftJoinAndSelect('user.preferences', 'p')
+            .getOne()
+    }
 
     async addUser(body: FullUserDTO) {
         let userEntity = this.buildUserEntity(body.user);

@@ -1,5 +1,6 @@
-import {Entity, PrimaryGeneratedColumn, Column, Unique, OneToOne, JoinColumn} from "typeorm";
-import {PreferencesEntity} from "../preferences/preferences.entity";
+import {Entity, PrimaryGeneratedColumn, Column, Unique, OneToOne, OneToMany} from "typeorm";
+import {PreferencesEntity} from "./preferences.entity";
+import {OrdersEntity} from "./orders.entity";
 
 @Entity('USER')
 @Unique(['username'])
@@ -19,6 +20,9 @@ export class UserEntity {
     @Column()
     password: string;
 
-    @OneToOne(type => PreferencesEntity)
+    @OneToOne(type => PreferencesEntity, preferences => preferences.user)
     preferences: PreferencesEntity;
+
+    @OneToMany(type => OrdersEntity, orders => orders.user)
+    orders: OrdersEntity;
 }

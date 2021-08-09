@@ -1,5 +1,5 @@
 import {Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn} from "typeorm";
-import {UserEntity} from "../user/user.entity";
+import {UserEntity} from "./user.entity";
 
 @Entity('SUBSCRIPTIONS')
 export class SubscriptionEntity {
@@ -8,10 +8,10 @@ export class SubscriptionEntity {
     subscriptionId
 
     @Column()
-    username: string
-
-    @Column()
     subscription: string;
+
+    @Column({name: 'user_id'})
+    userId: string
 
     @OneToOne(type => UserEntity)
     @JoinColumn({name: 'user_id'})

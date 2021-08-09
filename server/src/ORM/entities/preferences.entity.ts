@@ -1,5 +1,5 @@
-import {Column, Entity, IsNull, JoinColumn, OneToOne, PrimaryGeneratedColumn} from "typeorm";
-import {UserEntity} from "../user/user.entity";
+import {Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn} from "typeorm";
+import {UserEntity} from "./user.entity";
 
 @Entity('PREFERENCES')
 export class PreferencesEntity {
@@ -40,7 +40,13 @@ export class PreferencesEntity {
     @Column({nullable: true})
     avatar: string
 
-    @OneToOne(type => UserEntity)
+    @OneToOne(type => UserEntity, user => user.preferences,
+        {
+            eager: true,
+            cascade: true,
+            onDelete: "CASCADE",
+            orphanedRowAction: "delete"
+        })
     @JoinColumn({name: 'user_id'})
     user: UserEntity;
 }

@@ -4,8 +4,8 @@ import {HttpResponse, UserDTO, FullUserDTO} from "../../shared/user-dto";
 import {HttpResponseService} from "../../services/http/http-response.service";
 import {UUIDService} from "../../services/uuid-service";
 import {HttpStatusCodeEnum} from "../../services/http/http-status-code.enum";
-import {UserEntity} from "../../entities/user/user.entity";
-import {UserService} from "../../entities/user/user.service";
+import {UserEntity} from "../../ORM/entities/user.entity";
+import {UserService} from "../../ORM/services/user.service";
 import {UpdateResult} from "typeorm";
 
 @Controller('users')
@@ -97,9 +97,11 @@ export class UsersController {
         return this.userService.getAllUsersAcceptGivenId(id);
     }
 
-    // @Get('all-and-pref-accept-given-id')
-    // getAllUsersAndPrefAcceptGivenId(@Req() req){
-    //     const id = req.query.userId;
-    //     return this.userService.getAllUsersAndPreferencesAcceptGivenId(id);
-    // }
+    @Get('all-and-pref-accept-given-id')
+    async getAllUsersAndPrefAcceptGivenId(@Req() req){
+        const id = req.query.userId;
+        const a = await this.userService.getAllUsersAndPreferencesAcceptGivenId(id);
+        console.log(a)
+        return a;
+    }
 }
