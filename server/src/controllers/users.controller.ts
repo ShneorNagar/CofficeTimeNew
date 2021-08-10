@@ -1,28 +1,25 @@
 import {Body, Controller, Get, Logger, Post, Put, Req} from "@nestjs/common";
-import {UsersDalService} from "../components/users/users-dal.service";
 import {HttpResponse, UserDTO, FullUserDTO} from "../shared/user-dto";
 import {HttpResponseService} from "../services/http/http-response.service";
-import {UUIDService} from "../services/uuid-service";
 import {HttpStatusCodeEnum} from "../services/http/http-status-code.enum";
-import {UserEntity} from "../ORM/entities/user.entity";
 import {UserRepository} from "../ORM/repositories/user.repository";
-import {UpdateResult} from "typeorm";
+
 
 @Controller('users')
 export class UsersController {
 
-    constructor(private readonly userService: UserRepository,
+    constructor(private readonly userRepository: UserRepository,
                 private httpResponseService: HttpResponseService) {
     }
 
     private context = UsersController.name;
     private logger = new Logger(this.context);
 
-    // done
+    // done - fix in client (maybe user.user reference)
     @Post('login')
     async getUserByNameAndPassword(@Body() user: UserDTO): Promise<HttpResponse> {
         try {
-            const res = await this.userService.getUserByNameAndPassword(user.username, user.password);
+            const res = await this.userRepository.getUserAndPreferencesById(user.username, user.password);
             if (res) {
                 const message = `user: ${user.username} fetched successfully`;
                 this.logger.log(message, this.context);
@@ -42,13 +39,13 @@ export class UsersController {
     @Post('register')
     async register(@Body() body: FullUserDTO) {
         try {
-            const user = await this.userService.getUserByName(body.user.username);
+            const user = await this.userRepository.getUserByName(body.user.username);
             if (user) {
                 const existMessage = `username: ${body.user.username} already exist.`;
                 this.logger.log(existMessage, this.context);
                 return this.httpResponseService.buildResponse(existMessage, HttpStatusCodeEnum.CONFLICT);
             }
-            const newUser = await this.userService.addUser(body);
+            const newUser = await this.userRepository.addUser(body);
             const message = `user ${body.user.username} created successfully.`;
             this.logger.log(message, this.context);
             return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.CREATED, newUser);
@@ -63,7 +60,7 @@ export class UsersController {
     @Put('update')
     async update(@Body() body: FullUserDTO): Promise<any>{
         try {
-            await this.userService.updateUser(body);
+            await this.userRepository.updateUser(body);
             const message = `user: username: ${body.user.username} updated successfully.`
             this.logger.log(message, this.context);
             return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.CREATED, body)
@@ -76,7 +73,7 @@ export class UsersController {
     @Get('all')
     async getAllUsers(){
         try {
-            const users = await this.userService.getAllUsers();
+            const users = await this.userRepository.getAllUsers();
             this.logger.log(`getAllUsers ended.`);
             return this.httpResponseService.buildResponse(null, HttpStatusCodeEnum.OK, users);
         } catch (err) {
@@ -94,13 +91,13 @@ export class UsersController {
     @Get('allUsers')
     getAllUsersAcceptGivenId(@Req() req){
         const id = req.query.userId;
-        return this.userService.getAllUsersAcceptGivenId(id);
+        return this.userRepository.getAllUsersAcceptGivenId(id);
     }
 
     @Get('all-and-pref-accept-given-id')
     async getAllUsersAndPrefAcceptGivenId(@Req() req){
         const id = req.query.userId;
-        const a = await this.userService.getAllUsersAndPreferencesAcceptGivenId(id);
+        const a = await this.userRepository.getAllUsersAndPreferencesAcceptGivenId(id);
         console.log(a)
         return a;
     }

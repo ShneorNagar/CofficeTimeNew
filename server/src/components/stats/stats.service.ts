@@ -2,12 +2,14 @@ import {Injectable, Logger} from "@nestjs/common";
 import {StatsDalService} from "./stats-dal.service";
 import {HttpStatusCodeEnum} from "../../services/http/http-status-code.enum";
 import {HttpResponseService} from "../../services/http/http-response.service";
+import {StatsRepository} from "../../ORM/repositories/stats.repository";
 
 @Injectable()
 export class StatsService {
 
-    constructor(private statsDalService: StatsDalService,
-                private httpResponseService: HttpResponseService) {
+    // private statsDalService: StatsDalService
+    constructor(private httpResponseService: HttpResponseService,
+                private statsRepository: StatsRepository) {
     }
 
     private context = StatsService.name;
@@ -21,10 +23,13 @@ export class StatsService {
         return objectsArray;
     }
 
+    // todo test
     async getUserData(userId: string) {
         try {
-            const ordersCalls = this.buildArrayFromDBObject(await this.statsDalService.getUserOrderCalls(userId));
-            const ordersAccepts = this.buildArrayFromDBObject(await this.statsDalService.getOrderAccepts(userId));
+            // const ordersCalls = this.buildArrayFromDBObject(await this.statsDalService.getUserOrderCalls(userId));
+            const ordersCalls = this.buildArrayFromDBObject(await this.statsRepository.getUserOrderCalls(userId));
+            // const ordersAccepts = this.buildArrayFromDBObject(await this.statsDalService.getOrderAccepts(userId));
+            const ordersAccepts = this.buildArrayFromDBObject(await this.statsRepository.getOrderAccepts(userId));
             const allCups = {ordersCalls, ordersAccepts}
             return this.httpResponseService.buildResponse('user cups fetched.', HttpStatusCodeEnum.OK, allCups);
         } catch (err) {

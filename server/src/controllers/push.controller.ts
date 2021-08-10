@@ -3,11 +3,13 @@ import {UserSubscription} from "../shared/push-entity";
 import {PushDalService} from "../components/push/push-dal.service";
 import {HttpResponseService} from "../services/http/http-response.service";
 import {HttpStatusCodeEnum} from "../services/http/http-status-code.enum";
+import {SubscriptionRepository} from "../ORM/repositories/subscription.repository";
 
 @Controller('push')
 export class PushController {
 
-    constructor(private subscriptionsDalService: PushDalService,
+    //private subscriptionsDalService: PushDalService
+    constructor(private subscriptionRepository: SubscriptionRepository,
                 private httpResponseService: HttpResponseService) {
     }
 
@@ -19,13 +21,13 @@ export class PushController {
         this.logger.log(`createNewSub started`, this.context);
         let resMessage;
         try {
-            const userSubscription = await this.subscriptionsDalService.getUserSubscription(reqBody.user.userId);
+            const userSubscription = await this.subscriptionRepository.getUserSubscription(reqBody.user.userId);
             if (userSubscription){
                 this.logger.log(`user have subscription already. userId: ${reqBody.user.userId}`, this.context);
                 resMessage = 'all set... you already registered to push service';
                 return this.httpResponseService.buildResponse(resMessage, HttpStatusCodeEnum.OK);
             } else {
-                await this.subscriptionsDalService.insertNewSubscription(reqBody.subscription, reqBody.user.username, reqBody.user.userId);
+                await this.subscriptionRepository.insertNewSubscription(reqBody.subscription, reqBody.user.userId);
                 resMessage = 'subscription created';
                 this.logger.log(`${resMessage} userId: ${reqBody.user.userId}`, this.context);
                 return this.httpResponseService.buildResponse(resMessage, HttpStatusCodeEnum.CREATED);

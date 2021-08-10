@@ -10,9 +10,9 @@ import {UserDTO} from "../shared/user-dto";
 @Controller('orders')
 export class OrderController {
 
-    constructor(private pushDalService: PushDalService,
-                private pushService: PushService,
-                private orderDalService: OrderService,
+    // private pushDalService: PushDalService,
+    constructor(private pushService: PushService,
+                private orderService: OrderService,
                 private httpResponseService: HttpResponseService,
                 private webSocketPlasmaService: WebSocketPlasma) {
     }
@@ -26,7 +26,8 @@ export class OrderController {
 
         let responseMessage;
         try {
-            let newOrderId = await this.orderDalService.openOrder(user.userId)
+            // todo return new order id
+            let newOrderId = await this.orderService.openOrder(user.userId)
             await this.pushService.notifyUsers(user.username, user.userId, newOrderId);
 
             responseMessage = 'push notification sent successfully';
@@ -43,7 +44,7 @@ export class OrderController {
         this.logger.log(`orderResponse started. username: ${body.username}`, this.context);
         let responseMessage;
         try {
-            await this.orderDalService.updateUserResponse(body)
+            await this.orderService.updateUserResponse(body)
             this.webSocketPlasmaService.sendMessage(EVENT_TYPE.RESPONSE, body);
             this.logger.log(`orderResponse ended. username: ${body.username}`, this.context);
             responseMessage = 'thanks! your response will display on the plasma';
@@ -58,7 +59,7 @@ export class OrderController {
     async getActiveOrder(){
         this.logger.log(`getActiveOrder started`, this.context);
         try {
-            const activeOrder = await this.orderDalService.getActiveOrderDetails();
+            const activeOrder = await this.orderService.getActiveOrderDetails();
             if (activeOrder){
                 const message = 'active order details fetched.'
                 this.logger.log(message, this.context);

@@ -46,12 +46,13 @@ export class UserRepository {
             .getMany()
     }
 
-    async getUserAndPreferencesById(id: string){
+    async getUserAndPreferencesById(username: string, password: string){
         return this.userRepository
             .createQueryBuilder('user')
             .select(['user.username'])
-            .where('user.id = :id', {id})
-            .leftJoinAndSelect('user.preferences', 'p')
+            .where('user.username = :username', {username})
+            .andWhere('user.password = :password', {password})
+            .innerJoinAndSelect('user.preferences', 'p')
             .getOne()
     }
 
