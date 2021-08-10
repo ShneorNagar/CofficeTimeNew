@@ -1,5 +1,5 @@
 import {Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn} from "typeorm";
-import {OrdersEntity} from "./orders.entity";
+import {OrderEntity} from "./order.entity";
 
 @Entity('ORDERS_RESPONSES')
 export class OrderResponseEntity {
@@ -20,6 +20,7 @@ export class OrderResponseEntity {
     @Column({name: 'order_id'})
     orderId: string;
 
-    @ManyToOne(type => OrdersEntity, order => order.orderResponses)
-    order: OrdersEntity;
+    @ManyToOne(type => OrderEntity, order => order.orderResponses)
+    @JoinColumn()
+    order: OrderEntity;
 }

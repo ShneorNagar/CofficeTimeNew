@@ -5,7 +5,7 @@ import {Repository} from "typeorm";
 import {OrderUtils} from "../../components/order/order.utils";
 
 @Injectable()
-export class OrderResponseService{
+export class OrderResponseRepository {
 
     constructor(@InjectRepository(OrderResponseEntity)
                 private readonly orderResponseRepo: Repository<OrderResponseEntity>,

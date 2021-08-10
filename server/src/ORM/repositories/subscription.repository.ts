@@ -4,7 +4,7 @@ import {SubscriptionEntity} from "../entities/subscription.entity";
 import {Not, Repository} from "typeorm";
 
 @Injectable()
-export class SubscriptionService {
+export class SubscriptionRepository {
 
     constructor(@InjectRepository(SubscriptionEntity)
                 private readonly subscriptionRepository: Repository<SubscriptionEntity>) {

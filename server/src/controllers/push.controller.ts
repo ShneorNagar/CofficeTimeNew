@@ -1,8 +1,8 @@
 import {Body, Controller, Logger, Post} from "@nestjs/common";
-import {UserSubscription} from "../../shared/push-entity";
-import {PushDalService} from "./push-dal.service";
-import {HttpResponseService} from "../../services/http/http-response.service";
-import {HttpStatusCodeEnum} from "../../services/http/http-status-code.enum";
+import {UserSubscription} from "../shared/push-entity";
+import {PushDalService} from "../components/push/push-dal.service";
+import {HttpResponseService} from "../services/http/http-response.service";
+import {HttpStatusCodeEnum} from "../services/http/http-status-code.enum";
 
 @Controller('push')
 export class PushController {

@@ -6,7 +6,7 @@ import {FullUserDTO, PreferencesDTO, UserDTO} from "../../shared/user-dto";
 import {PreferencesEntity} from "../entities/preferences.entity";
 
 @Injectable()
-export class UserService {
+export class UserRepository {
 
     constructor(@InjectRepository(UserEntity)
                 private readonly userRepository: Repository<UserEntity>) {

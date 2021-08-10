@@ -1,9 +1,8 @@
-import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import {OrderResponseEntity} from "./order-response.entity";
-import {UserEntity} from "./user.entity";
 
 @Entity('ORDERS')
-export class OrdersEntity {
+export class OrderEntity {
 
     @PrimaryGeneratedColumn("uuid", {name: 'order_id'})
     readonly id: string;
@@ -20,6 +19,4 @@ export class OrdersEntity {
     @OneToMany(type => OrderResponseEntity, orderResponse => orderResponse.order)
     readonly orderResponses: OrderResponseEntity;
 
-    @ManyToOne(type => UserEntity, user => user.orders)
-    user: UserEntity;
 }

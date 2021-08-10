@@ -1,19 +1,19 @@
 import {Module} from "@nestjs/common";
 import {TypeOrmModule} from "@nestjs/typeorm";
-import {UserService} from "./services/user.service";
-import {UsersController} from "../components/users/users.controller";
+import {UserRepository} from "./repositories/user.repository";
+import {UsersController} from "../controllers/users.controller";
 import {HttpResponseService} from "../services/http/http-response.service";
-import {SubscriptionService} from "./services/subscription.service";
+import {SubscriptionRepository} from "./repositories/subscription.repository";
 import {UserEntity} from "./entities/user.entity";
 import {PreferencesEntity} from "./entities/preferences.entity";
 import {SubscriptionEntity} from "./entities/subscription.entity";
-import {OrdersEntity} from "./entities/orders.entity";
+import {OrderEntity} from "./entities/order.entity";
 import {OrderResponseEntity} from "./entities/order-response.entity";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([UserEntity, PreferencesEntity, SubscriptionEntity, OrdersEntity, OrderResponseEntity])],
-    providers: [UserService, SubscriptionService, HttpResponseService],
+    imports: [TypeOrmModule.forFeature([UserEntity, PreferencesEntity, SubscriptionEntity, OrderEntity, OrderResponseEntity])],
+    providers: [UserRepository, SubscriptionRepository, HttpResponseService],
     controllers: [UsersController],
-    exports: [UserService, SubscriptionService]
+    exports: [UserRepository, SubscriptionRepository]
 })
 export class OrmModule {}

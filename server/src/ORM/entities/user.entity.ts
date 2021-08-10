@@ -1,6 +1,5 @@
-import {Entity, PrimaryGeneratedColumn, Column, Unique, OneToOne, OneToMany} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, Unique, OneToOne} from "typeorm";
 import {PreferencesEntity} from "./preferences.entity";
-import {OrdersEntity} from "./orders.entity";
 
 @Entity('USER')
 @Unique(['username'])
@@ -23,6 +22,4 @@ export class UserEntity {
     @OneToOne(type => PreferencesEntity, preferences => preferences.user)
     preferences: PreferencesEntity;
 
-    @OneToMany(type => OrdersEntity, orders => orders.user)
-    orders: OrdersEntity;
 }

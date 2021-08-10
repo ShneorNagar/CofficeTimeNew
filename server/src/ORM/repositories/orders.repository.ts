@@ -1,17 +1,17 @@
 import {Injectable} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
-import {OrdersEntity} from "../entities/orders.entity";
+import {OrderEntity} from "../entities/order.entity";
 import {Repository} from "typeorm";
 import {OrderUtils} from "../../components/order/order.utils";
 
 Injectable()
-export class OrdersService{
+export class OrdersRepository {
 
     ACTIVE_ORDER = 1;
     DEACTIVATE_ORDER = 0;
 
-    constructor(@InjectRepository(OrdersEntity)
-                private readonly ordersRepository: Repository<OrdersEntity>,
+    constructor(@InjectRepository(OrderEntity)
+                private readonly ordersRepository: Repository<OrderEntity>,
                 private orderUtils: OrderUtils) {
     }
 
@@ -24,7 +24,7 @@ export class OrdersService{
     async deactivateOrderById(orderId: string){
         return this.ordersRepository
             .createQueryBuilder('order')
-            .update(OrdersEntity)
+            .update(OrderEntity)
             .set({isOrderActive: this.DEACTIVATE_ORDER})
             .where('order_id = :orderId', {orderId})
             .execute();
@@ -35,7 +35,7 @@ export class OrdersService{
         return this.ordersRepository
             .createQueryBuilder('order')
             .insert()
-            .into(OrdersEntity)
+            .into(OrderEntity)
             .values([{
                 callerId: userId,
                 isOrderActive: 1,

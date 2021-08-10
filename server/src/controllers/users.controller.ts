@@ -1,17 +1,17 @@
 import {Body, Controller, Get, Logger, Post, Put, Req} from "@nestjs/common";
-import {UsersDalService} from "./users-dal.service";
-import {HttpResponse, UserDTO, FullUserDTO} from "../../shared/user-dto";
-import {HttpResponseService} from "../../services/http/http-response.service";
-import {UUIDService} from "../../services/uuid-service";
-import {HttpStatusCodeEnum} from "../../services/http/http-status-code.enum";
-import {UserEntity} from "../../ORM/entities/user.entity";
-import {UserService} from "../../ORM/services/user.service";
+import {UsersDalService} from "../components/users/users-dal.service";
+import {HttpResponse, UserDTO, FullUserDTO} from "../shared/user-dto";
+import {HttpResponseService} from "../services/http/http-response.service";
+import {UUIDService} from "../services/uuid-service";
+import {HttpStatusCodeEnum} from "../services/http/http-status-code.enum";
+import {UserEntity} from "../ORM/entities/user.entity";
+import {UserRepository} from "../ORM/repositories/user.repository";
 import {UpdateResult} from "typeorm";
 
 @Controller('users')
 export class UsersController {
 
-    constructor(private readonly userService: UserService,
+    constructor(private readonly userService: UserRepository,
                 private httpResponseService: HttpResponseService) {
     }
 
