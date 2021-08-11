@@ -23,6 +23,11 @@ export class HttpService {
     return this.http.post<HttpResponse>(`${this.SERVER_URL}${path}`, body, postHeaders).toPromise();
   }
 
+  sendPutRequest(path: string, body: any, options?: {headers: HttpHeaders}): Promise<HttpResponse> {
+    const postHeaders = options ?? this.httpOptions;
+    return this.http.put<HttpResponse>(`${this.SERVER_URL}${path}`, body, postHeaders).toPromise();
+  }
+
   stringifyResponseMessage(message){
     if (message){
       return typeof message === 'object' ? JSON.stringify(message) : message;

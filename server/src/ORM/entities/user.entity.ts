@@ -16,7 +16,7 @@ export class UserEntity {
     @Column()
     username: string;
 
-    @Column()
+    @Column({select: false})
     password: string;
 
     @OneToOne(type => PreferencesEntity, preferences => preferences.user)

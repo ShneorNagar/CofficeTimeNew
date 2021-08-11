@@ -15,7 +15,7 @@ export class UsersController {
     private context = UsersController.name;
     private logger = new Logger(this.context);
 
-    // done - fix in client (maybe user.user reference)
+    // done
     @Post('login')
     async getUserByNameAndPassword(@Body() user: UserDTO): Promise<HttpResponse> {
         try {
@@ -56,7 +56,6 @@ export class UsersController {
     }
 
     // done
-    // todo change method in client
     @Put('update')
     async update(@Body() body: FullUserDTO): Promise<any>{
         try {

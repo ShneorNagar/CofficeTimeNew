@@ -49,7 +49,7 @@ export class UserRepository {
     async getUserAndPreferencesById(username: string, password: string){
         return this.userRepository
             .createQueryBuilder('user')
-            .select(['user.username'])
+            .select(['user'])
             .where('user.username = :username', {username})
             .andWhere('user.password = :password', {password})
             .innerJoinAndSelect('user.preferences', 'p')
