@@ -20,8 +20,8 @@ export class UserDataComponent implements OnInit {
   ngOnInit(): void {
     this.localUser = this.localUserService.getUser();
     this.fromGroup = new FormGroup({
-      username: new FormControl(this.localUser?.user?.username ?? '', Validators.required),
-      password: new FormControl(this.localUser?.user?.password ?? '', Validators.required)
+      username: new FormControl(this.localUser?.username ?? '', Validators.required),
+      password: new FormControl(this.localUser?.password ?? '', Validators.required)
     })
     this.userFormGroup.addControl('user', this.fromGroup)
   }

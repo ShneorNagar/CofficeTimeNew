@@ -79,7 +79,7 @@ export class NotificationsComponent implements OnChanges{
   }
   private buildReqBody(value: UserResponseEnum, orderId: string) {
     return {
-      userId: this.userEntity.user.userId,
+      userId: this.userEntity.id,
       value,
       orderId
     }

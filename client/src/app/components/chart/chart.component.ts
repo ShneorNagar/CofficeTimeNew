@@ -29,7 +29,7 @@ export class ChartComponent implements OnInit{
       this.charts = this.chartService.getCharts();
     });
 
-    this.configService.loadAllUsers(this.localUserService.getUser().user.userId)
+    this.configService.loadAllUsers(this.localUserService.getUser().id)
       .then(res => {
         this.users = res.value;
 

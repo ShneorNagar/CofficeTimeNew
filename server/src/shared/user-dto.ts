@@ -1,12 +1,14 @@
 export class FullUserDTO {
-    user: UserDTO;
+    username: string;
+    password?: string;
+    id: string;
     preferences: PreferencesDTO;
 }
 
 export class UserDTO {
     username: string;
     password?: string;
-    userId: string;
+    id: string;
 }
 
 export class PreferencesDTO {

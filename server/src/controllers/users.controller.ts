@@ -16,12 +16,13 @@ export class UsersController {
     private logger = new Logger(this.context);
 
     // done
+    // todo use type definition
     @Post('login')
-    async getUserByNameAndPassword(@Body() user: UserDTO): Promise<HttpResponse> {
+    async getUserByNameAndPassword(@Body() user: any): Promise<HttpResponse> {
         try {
             const res = await this.userRepository.getUserAndPreferencesById(user.username, user.password);
             if (res) {
-                const message = `user: ${user.username} fetched successfully`;
+                const message = `user ${user.username} fetched successfully`;
                 this.logger.log(message, this.context);
                 return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.OK, res);
             } else {
@@ -37,16 +38,16 @@ export class UsersController {
 
     // done
     @Post('register')
-    async register(@Body() body: FullUserDTO) {
+    async register(@Body() body: any) {
         try {
-            const user = await this.userRepository.getUserByName(body.user.username);
+            const user = await this.userRepository.getUserByName(body.username);
             if (user) {
-                const existMessage = `username: ${body.user.username} already exist.`;
+                const existMessage = `username: ${body.username} already exist.`;
                 this.logger.log(existMessage, this.context);
                 return this.httpResponseService.buildResponse(existMessage, HttpStatusCodeEnum.CONFLICT);
             }
             const newUser = await this.userRepository.addUser(body);
-            const message = `user ${body.user.username} created successfully.`;
+            const message = `user ${body.username} created successfully.`;
             this.logger.log(message, this.context);
             return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.CREATED, newUser);
         } catch (err) {
@@ -57,10 +58,10 @@ export class UsersController {
 
     // done
     @Put('update')
-    async update(@Body() body: FullUserDTO): Promise<any>{
+    async update(@Body() body: any): Promise<any>{
         try {
-            await this.userRepository.updateUser(body);
-            const message = `user: username: ${body.user.username} updated successfully.`
+            await this.userRepository.updatePreferences(body);
+            const message = `user ${body.username} updated successfully.`
             this.logger.log(message, this.context);
             return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.CREATED, body)
         } catch (err) {
@@ -90,7 +91,7 @@ export class UsersController {
     @Get('allUsers')
     getAllUsersAcceptGivenId(@Req() req){
         const id = req.query.userId;
-        return this.userRepository.getAllUsersAcceptGivenId(id);
+        return this.userRepository.getAllUsersExceptGivenId(id);
     }
 
     @Get('all-and-pref-accept-given-id')

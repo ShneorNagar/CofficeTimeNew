@@ -27,8 +27,8 @@ export class OrderController {
         let responseMessage;
         try {
             // todo return new order id
-            let newOrderId = await this.orderService.openOrder(user.userId)
-            await this.pushService.notifyUsers(user.username, user.userId, newOrderId);
+            let newOrderId = await this.orderService.openOrder(user.id)
+            await this.pushService.notifyUsers(user.username, user.id, newOrderId);
 
             responseMessage = 'push notification sent successfully';
             this.logger.log(`push notification sent successfully`)

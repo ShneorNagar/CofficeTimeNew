@@ -26,13 +26,13 @@ export class UserRepository {
 
     async getAllUsers(){
         return this.userRepository.createQueryBuilder('user')
-            .select(['user.username', 'user.id'])
+            .select(['user'])
             .getMany();
     }
 
-    async getAllUsersAcceptGivenId(id: string){
+    async getAllUsersExceptGivenId(id: string){
         return this.userRepository.createQueryBuilder('user')
-            .select(['user.username', 'user.id'])
+            .select(['user'])
             .where('user.id != :id', {id})
             .getMany();
     }
@@ -40,7 +40,7 @@ export class UserRepository {
     async getAllUsersAndPreferencesAcceptGivenId(id: string) {
         return this.userRepository
             .createQueryBuilder('user')
-            .select(['user.username'])
+            .select(['user'])
             .where('user.id != :id', {id})
             .leftJoinAndSelect('user.preferences', 'p')
             .getMany()
@@ -56,27 +56,20 @@ export class UserRepository {
             .getOne()
     }
 
-    async addUser(body: FullUserDTO) {
-        let userEntity = this.buildUserEntity(body.user);
-        let preferences = this.buildPreferencesEntity(body.preferences);
+    async addUser(user: FullUserDTO) {
+        let userEntity = this.buildUserEntity(user);
+        let preferences = this.buildPreferencesEntity(user.preferences);
         preferences.user = userEntity;
 
         await this.userRepository.save(userEntity);
         await getConnection().manager.save(preferences);
-        return body;
+        return user;
     }
 
-    async updateUser(body: FullUserDTO) {
-        let userEntity = this.buildUserEntity(body.user);
-        let preferences = this.buildPreferencesEntity(body.preferences);
+    async updatePreferences(user: FullUserDTO) {
+        let preferences = this.buildPreferencesEntity(user.preferences);
 
-        return Promise.all([
-            this.userRepository.createQueryBuilder()
-                .update(UserEntity)
-                .set(userEntity)
-                .where('user_id = :id', {id: body.user.userId})
-                .execute(),
-            getConnection().manager.createQueryBuilder()
+        return getConnection().manager.createQueryBuilder()
                 .update(PreferencesEntity)
                 .set({
                     coffee: preferences.coffee,
@@ -87,8 +80,8 @@ export class UserRepository {
                     note: preferences.note,
                     avatar: preferences.avatar,
                 })
-                .where('user_id = :id', {id: body.user.userId})
-                .execute()]);
+                .where('user_id = :id', {id: user.id})
+                .execute();
     }
 
     private buildUserEntity(user: UserDTO): UserEntity {

@@ -18,7 +18,7 @@ export class SubscriptionService {
     if (this.localUserService.isUserLoggedIn()) {
 
       let userSubscription = {
-        user: this.localUserService.getUser().user,
+        user: this.localUserService.getUser(),
         subscription: sub
       } as UserSubscription
 

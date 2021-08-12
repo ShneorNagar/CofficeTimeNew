@@ -10,23 +10,9 @@ export class UsersDalService {
     }
 
     // done
-    async updateUser(data: FullUserDTO): Promise<any> {
-        const updateUserParams = [data.user.username, data.user.userId]
+    async updateUser(user: FullUserDTO): Promise<any> {
+        const updateUserParams = [user.username, user.id]
         return this.sqlite.db.run(SQL.user_update, updateUserParams);
-    }
-
-    async updatePreferences(data: FullUserDTO): Promise<any> {
-        const updatePreferencesParam = [
-            data.preferences.coffee,
-            data.preferences.tea,
-            data.preferences.sugar,
-            data.preferences.milk,
-            data.preferences.note,
-            data.preferences.drink_type,
-            data.preferences.avatar,
-            data.user.userId
-        ]
-        return this.sqlite.db.run(SQL.preferences_update, updatePreferencesParam);
     }
 
     // done
@@ -38,7 +24,7 @@ export class UsersDalService {
 
     createUser(userId: string, userDto: FullUserDTO) {
         let createUserQuery = SQL.user_createUser;
-        let createUserParams = [userId, userDto.user?.username, userDto.user?.password];
+        let createUserParams = [userId, userDto?.username, userDto?.password];
         return this.sqlite.db.run(createUserQuery, createUserParams);
     }
 
@@ -62,23 +48,5 @@ export class UsersDalService {
 
     async getAllUsers(userId: any) {
         return this.sqlite.db.all(SQL.user_getAllAcceptCurrent, [userId]);
-    }
-
-    buildUserObject(row: any) {
-        return {
-            user: {
-                username: row['username'],
-                userId: row['user_id']
-            },
-            preferences: {
-                coffee: row['coffee'],
-                tea: row['tea'],
-                sugar: row['sugar'],
-                milk: row['milk'],
-                note: row['note'],
-                drink_type: row['drink_type'],
-                avatar: row['avatar']
-            }
-        } as FullUserDTO
     }
 }

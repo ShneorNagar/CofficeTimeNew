@@ -41,7 +41,7 @@ export class ChartService {
 
   async init() {
     try {
-      const userId = this.localUserService.getUser().user.userId;
+      const userId = this.localUserService.getUser().id;
       const res = await this.getUserData(userId);
       this.allOrders = res.value.ordersAccepts.concat(res.value.ordersCalls);
       this.buildOrdersSum(res);

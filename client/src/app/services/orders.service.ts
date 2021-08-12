@@ -18,7 +18,8 @@ export class OrdersService {
     if (this.localUserService.isUserLoggedIn()) {
       let response: HttpResponse | any;
       try {
-        response = await this.httpService.sendPostRequest('orders/newOrder', this.localUserService.getUser().user);
+        // todo send user as object (search for more cases like this)
+        response = await this.httpService.sendPostRequest('orders/newOrder', this.localUserService.getUser());
         this.httpService.displayToastByResponse(response);
         return response;
       } catch (err) {

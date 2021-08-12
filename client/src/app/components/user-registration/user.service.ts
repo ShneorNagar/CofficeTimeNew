@@ -29,7 +29,7 @@ export class UserService {
   public sendReqToServer(state: UserState, data: any) {
     switch (state) {
       case UserState.LOG_IN: {
-        this.sendPostRequest(routs.LOG_IN.valueOf(), data.user);
+        this.sendPostRequest(routs.LOG_IN.valueOf(), data);
         break;
       }
       case UserState.LOG_OUT: {
