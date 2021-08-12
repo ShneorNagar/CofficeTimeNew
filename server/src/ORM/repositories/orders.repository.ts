@@ -3,6 +3,7 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {OrderEntity} from "../entities/order.entity";
 import {Repository} from "typeorm";
 import {OrderUtils} from "../../components/order/order.utils";
+import {UserEntity} from "../entities/user.entity";
 
 Injectable()
 export class OrdersRepository {
@@ -15,42 +16,35 @@ export class OrdersRepository {
                 private orderUtils: OrderUtils) {
     }
 
-    // todo test
+    // done
     async getActiveOrder(){
-        return this.ordersRepository.find({where: {isOrderActive : this.ACTIVE_ORDER}})
+        return this.ordersRepository.findOne({where: {isOrderActive : this.ACTIVE_ORDER}})
     }
 
-    // todo test
+    // done
     async deactivateOrderById(orderId: string){
         return this.ordersRepository
             .createQueryBuilder('order')
             .update(OrderEntity)
             .set({isOrderActive: this.DEACTIVATE_ORDER})
-            .where('order_id = :orderId', {orderId})
+            .where('id = :orderId', {orderId})
             .execute();
     }
 
-    // todo test
+    // done
     async createNewOrder(userId: string){
-        return this.ordersRepository
-            .createQueryBuilder('order')
-            .insert()
-            .into(OrderEntity)
-            .values([{
-                callerId: userId,
-                isOrderActive: 1,
-                orderTime: this.orderUtils.getCurrDate
-            }])
+        const order = new OrderEntity(userId, 1, this.orderUtils.getCurrDate())
+        return this.ordersRepository.save(order);
     }
 
-    // todo test
+    // done
     async getActiveOrderDetails(){
         return this.ordersRepository
             .createQueryBuilder('order')
-            .select(['order'])
-            .leftJoin('user', 'u')
-            .where('user.id = :id', {id: 2})
-            .andWhere('order.isOrderActive = :isActive', {isActive: 1})
-            .getOne()
+            .select(['order.id as id', 'order.callerId as callerId', 'order.orderTime as orderTime', 'u.username as username'])
+            .where('order.isOrderActive = :isActive', {isActive: 1})
+            .andWhere('u.id = order.callerId')
+            .innerJoin(UserEntity, 'u')
+            .getRawOne()
     }
 }

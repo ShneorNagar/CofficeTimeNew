@@ -4,6 +4,7 @@ import {HttpErrorObject, HttpResponseService} from "../../services/http/http-res
 import {HttpStatusCodeEnum} from "../../services/http/http-status-code.enum";
 import {OrdersRepository} from "../../ORM/repositories/orders.repository";
 import {OrderResponseRepository} from "../../ORM/repositories/order-response.repository";
+import {OrderEntity} from "../../ORM/entities/order.entity";
 
 @Injectable()
 export class OrderService {
@@ -17,22 +18,21 @@ export class OrderService {
     private context = OrderService.name;
     private logger = new Logger(this.context);
 
-    // todo test
+    // done
     async openOrder(userId: string): Promise<any | HttpErrorObject> {
         this.logger.log(`openOrder started`, this.context)
         // let order = await this.orderDalService.getActiveOrder();
-        let order = await this.ordersRepository.getActiveOrder();
+        let order: OrderEntity = await this.ordersRepository.getActiveOrder();
         if (order) {
-            const currOrderId = order['order_id'];
 
-            if (this.isOrderTimeoutPassed(order)) {
+            if (this.isOrderTimeoutPassed(order.orderTime)) {
                 this.logger.log(`deactivating old order, and open new one`, this.context)
                 // await this.orderDalService.deactivateOrderById(currOrderId);
-                await this.ordersRepository.deactivateOrderById(currOrderId);
+                await this.ordersRepository.deactivateOrderById(order.id);
                 // const newOrderId = this.uuidService.generateUUID();
                 // await this.orderDalService.createNewOrder(newOrderId, userId);
-                await this.ordersRepository.createNewOrder(userId);
-                return 'newOrderId';
+                const newOrder = await this.ordersRepository.createNewOrder(userId);
+                return newOrder.id;
             } else {
                 const message = 'there is an active order already.';
                 this.logger.log(message, this.context)
@@ -42,8 +42,8 @@ export class OrderService {
             this.logger.log(`opening new order`, this.context)
             // const newOrderId = this.uuidService.generateUUID();
             // await this.orderDalService.createNewOrder(newOrderId, userId);
-            await this.ordersRepository.createNewOrder(userId);
-            return 'newOrderId';
+            const newOrder = await this.ordersRepository.createNewOrder(userId);
+            return newOrder.id;
         }
     }
 
@@ -74,10 +74,10 @@ export class OrderService {
         }
     }
 
-    private isOrderTimeoutPassed(order: any) {
-        let orderTime = new Date(order['order_time']);
+    private isOrderTimeoutPassed(orderTime: string) {
+        let time = new Date(orderTime);
         let currTime = new Date(this.orderUtils.getCurrDate());
-        let timeDiff = currTime.getTime() - orderTime.getTime();
+        let timeDiff = currTime.getTime() - time.getTime();
         let minuteDiff = timeDiff / 1000 / 60;
         return minuteDiff > 3;
     }

@@ -1,6 +1,5 @@
 import {Body, Controller, Get, Logger, Post} from "@nestjs/common";
 import {OrderService} from "../components/order/order.service";
-import {PushDalService} from "../components/push/push-dal.service";
 import {PushService} from "../components/push/push.service";
 import {HttpResponseService} from "../services/http/http-response.service";
 import {HttpStatusCodeEnum} from "../services/http/http-status-code.enum";
@@ -20,18 +19,18 @@ export class OrderController {
     private context = OrderController.name;
     private logger = new Logger(this.context);
 
+    // done
     @Post('newOrder')
     async podcastForNewOrder(@Body() user: UserDTO) {
         this.logger.log(`podcastForNewOrder started`, this.context);
-
         let responseMessage;
+
         try {
-            // todo return new order id
             let newOrderId = await this.orderService.openOrder(user.id)
             await this.pushService.notifyUsers(user.username, user.id, newOrderId);
 
             responseMessage = 'push notification sent successfully';
-            this.logger.log(`push notification sent successfully`)
+            this.logger.log(responseMessage)
             return this.httpResponseService.buildResponse(responseMessage, HttpStatusCodeEnum.OK);
         } catch (err) {
             this.logger.error(err, this.context);
@@ -55,6 +54,7 @@ export class OrderController {
         }
     }
 
+    // done
     @Get('activeOrderDetails')
     async getActiveOrder(){
         this.logger.log(`getActiveOrder started`, this.context);

@@ -1,5 +1,5 @@
 import {Body, Controller, Get, Logger, Post, Put, Req} from "@nestjs/common";
-import {HttpResponse, UserDTO, FullUserDTO} from "../shared/user-dto";
+import {HttpResponse} from "../shared/user-dto";
 import {HttpResponseService} from "../services/http/http-response.service";
 import {HttpStatusCodeEnum} from "../services/http/http-status-code.enum";
 import {UserRepository} from "../ORM/repositories/user.repository";
@@ -46,7 +46,8 @@ export class UsersController {
                 this.logger.log(existMessage, this.context);
                 return this.httpResponseService.buildResponse(existMessage, HttpStatusCodeEnum.CONFLICT);
             }
-            const newUser = await this.userRepository.addUser(body);
+            await this.userRepository.addUser(body);
+            const newUser = await this.userRepository.getUserByNameAndPassword(body.username, body.password)
             const message = `user ${body.username} created successfully.`;
             this.logger.log(message, this.context);
             return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.CREATED, newUser);
@@ -70,28 +71,17 @@ export class UsersController {
         }
     }
 
-    @Get('all')
-    async getAllUsers(){
-        try {
-            const users = await this.userRepository.getAllUsers();
-            this.logger.log(`getAllUsers ended.`);
-            return this.httpResponseService.buildResponse(null, HttpStatusCodeEnum.OK, users);
-        } catch (err) {
-            this.logger.error(err, this.context);
-            return this.httpResponseService.buildResponse('error while fetching users', HttpStatusCodeEnum.INTERNAL_SERVER_ERROR, err);
-        }
-    }
-
     // done
     /**
      *
      * @param req
-     * @Return all users accept selected
+     * @Return all users except selected
      */
-    @Get('allUsers')
-    getAllUsersAcceptGivenId(@Req() req){
+    @Get('all')
+    async getAllUsersAcceptGivenId(@Req() req){
         const id = req.query.userId;
-        return this.userRepository.getAllUsersExceptGivenId(id);
+        const users = await this.userRepository.getAllUsersExceptGivenId(id);
+        return this.httpResponseService.buildResponse('all users fetched.', HttpStatusCodeEnum.OK, users)
     }
 
     @Get('all-and-pref-accept-given-id')

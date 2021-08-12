@@ -4,6 +4,12 @@ import {OrderResponseEntity} from "./order-response.entity";
 @Entity('ORDERS')
 export class OrderEntity {
 
+    constructor(callerId: string, isOrderActive: number, orderTime: string) {
+        this.callerId = callerId;
+        this.isOrderActive = isOrderActive;
+        this.orderTime = orderTime;
+    }
+
     @PrimaryGeneratedColumn("uuid", {name: 'order_id'})
     readonly id: string;
 

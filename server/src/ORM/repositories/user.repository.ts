@@ -13,21 +13,18 @@ export class UserRepository {
     }
 
     getUserByNameAndPassword(username: string, password: string): Promise<UserEntity> {
-        return this.userRepository.createQueryBuilder('user')
+        return this.userRepository
+            .createQueryBuilder('user')
+            .select(['user'])
             .where('user.username = :username', {username})
             .andWhere('user.password = :password', {password})
+            .leftJoinAndSelect('user.preferences', 'p')
             .getOne()
     }
 
     async getUserByName(username: string): Promise<UserEntity> {
         const result = await this.userRepository.find({username});
         return result[0];
-    }
-
-    async getAllUsers(){
-        return this.userRepository.createQueryBuilder('user')
-            .select(['user'])
-            .getMany();
     }
 
     async getAllUsersExceptGivenId(id: string){

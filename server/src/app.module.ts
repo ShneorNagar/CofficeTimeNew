@@ -4,7 +4,6 @@ import {PushDalService} from "./components/push/push-dal.service";
 import {PushService} from "./components/push/push.service";
 import {Sqlite} from "../public/DB/db";
 import {WebSocketPlasma} from "./web-socket/event-gateway.app";
-import {StatsDalService} from "./components/stats/stats-dal.service";
 import {StatsService} from "./components/stats/stats.service";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {OrmModule} from "./ORM/orm.module";
@@ -27,7 +26,6 @@ import {OrmModule} from "./ORM/orm.module";
         PushService,
         Sqlite,
         WebSocketPlasma,
-        StatsDalService,
         StatsService],
 })
 export class AppModule {

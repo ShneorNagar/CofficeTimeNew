@@ -9,9 +9,9 @@ export interface Avatars {
 }
 
 export interface ActiveOrder{
-  order_id: string;
-  order_time: string;
-  caller_id: string;
+  id: string;
+  orderTime: string;
+  callerId: string;
   username: string;
 }
 
@@ -29,7 +29,7 @@ export class ConfigService {
   }
 
   async loadAllUsers(userId){
-    return await this.httpService.sendGetRequest('users/allUsers',{userId});
+    return await this.httpService.sendGetRequest('users/all',{userId});
   }
 
   async loadAvatars() {

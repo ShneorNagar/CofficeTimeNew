@@ -57,13 +57,13 @@ export class NotificationsComponent implements OnChanges{
   }
 
   accept() {
-    let reqBody = this.buildReqBody(UserResponseEnum.ACCEPT, this.order.order_id);
+    let reqBody = this.buildReqBody(UserResponseEnum.ACCEPT, this.order.id);
     this.sendRequest(reqBody);
     this.responseSent.emit();
   }
 
   decline() {
-    let reqBody = this.buildReqBody(UserResponseEnum.DECLINE, this.order.order_id);
+    let reqBody = this.buildReqBody(UserResponseEnum.DECLINE, this.order.id);
     this.sendRequest(reqBody);
     this.responseSent.emit();
   }

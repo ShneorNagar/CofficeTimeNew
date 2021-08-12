@@ -1,7 +1,9 @@
 import {Injectable} from "@nestjs/common";
-import {getRepository, Repository} from "typeorm";
+import {Repository} from "typeorm";
 import {UserEntity} from "../entities/user.entity";
 import {InjectRepository} from "@nestjs/typeorm";
+import {OrderEntity} from "../entities/order.entity";
+import {OrderResponseEntity} from "../entities/order-response.entity";
 
 @Injectable()
 export class StatsRepository {
@@ -10,25 +12,25 @@ export class StatsRepository {
                 private readonly userRepository: Repository<UserEntity>) {
     }
 
+    // done
     async getUserOrderCalls(id: string){
-        return this.userRepository.createQueryBuilder('user')
-            .select(['user.username', 'o.orderTime'])
+        return this.userRepository
+            .createQueryBuilder('user')
+            .select(['user.username as username', 'o.orderTime as time'])
             .where('user.id = :id', {id})
-            .innerJoin('ORDERS', 'o')
-            .getMany();
+            .andWhere('o.callerId = :id', {id})
+            .innerJoin(OrderEntity, 'o')
+            .getRawMany()
     }
 
+    // done
     async getOrderAccepts(id: string){
-        return this.userRepository.createQueryBuilder('user')
-            .select(['user.username', 'r.responseTime'])
+        return this.userRepository
+            .createQueryBuilder('user')
+            .select(['user.username as username', 'r.responseTime as time'])
             .where('user.id = :id', {id})
-            .innerJoin('ORDERS_RESPONSES', 'r')
-            .getMany();
+            .andWhere('r.userId = :id', {id})
+            .innerJoin(OrderResponseEntity, 'r')
+            .getRawMany();
     }
-
-    // .createQueryBuilder('user')
-    // .select(['user.username', 'p.coffee'])
-    // .where('user.id != :id', {id})
-    // .leftJoin('user.preferences', 'p')
-    // .getMany()
 }
