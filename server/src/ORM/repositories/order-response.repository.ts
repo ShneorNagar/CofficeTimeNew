@@ -12,7 +12,6 @@ export class OrderResponseRepository {
                 private orderUtils: OrderUtils) {
     }
 
-    // todo test && create type for body param
     async updateUserResponse(body: any){
         let userId = body.userId;
         let responseTime = this.orderUtils.getCurrDate();
@@ -28,13 +27,14 @@ export class OrderResponseRepository {
                 responseValue,
                 orderId: ownerOrderId
             }])
+            .execute();
     }
 
     // todo test
     async getUserResponse(body: any){
         let userId = body.userId;
         let ownerOrderId = body.orderId;
-        return this.orderResponseRepo.find({where: {userId: userId, orderId: ownerOrderId}});
+        return this.orderResponseRepo.findOne({where: {userId: userId, orderId: ownerOrderId}});
     }
 
 }

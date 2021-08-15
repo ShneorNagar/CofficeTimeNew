@@ -19,4 +19,12 @@ export class OrderUtils{
 
         return `${hour}:${minute}:${seconds} ${month}/${day}/${year}`
     }
+
+    public isOrderTimeoutPassed(orderTime: string) {
+        let time = new Date(orderTime);
+        let currTime = new Date(this.getCurrDate());
+        let timeDiff = currTime.getTime() - time.getTime();
+        let minuteDiff = timeDiff / 1000 / 60;
+        return minuteDiff > 3;
+    }
 }

@@ -5,15 +5,16 @@ import {HttpResponseService} from "../services/http/http-response.service";
 import {HttpStatusCodeEnum} from "../services/http/http-status-code.enum";
 import {EVENT_TYPE, WebSocketPlasma} from "../web-socket/event-gateway.app";
 import {UserDTO} from "../shared/user-dto";
+import {OrderUtils} from "../components/order/order.utils";
 
 @Controller('orders')
 export class OrderController {
 
-    // private pushDalService: PushDalService,
     constructor(private pushService: PushService,
                 private orderService: OrderService,
                 private httpResponseService: HttpResponseService,
-                private webSocketPlasmaService: WebSocketPlasma) {
+                private webSocketPlasmaService: WebSocketPlasma,
+                private orderUtils: OrderUtils) {
     }
 
     private context = OrderController.name;
@@ -60,7 +61,7 @@ export class OrderController {
         this.logger.log(`getActiveOrder started`, this.context);
         try {
             const activeOrder = await this.orderService.getActiveOrderDetails();
-            if (activeOrder){
+            if (activeOrder && !this.orderUtils.isOrderTimeoutPassed(activeOrder.orderTime)){
                 const message = 'active order details fetched.'
                 this.logger.log(message, this.context);
                 return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.OK, activeOrder);

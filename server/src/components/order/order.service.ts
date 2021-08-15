@@ -21,64 +21,51 @@ export class OrderService {
     // done
     async openOrder(userId: string): Promise<any | HttpErrorObject> {
         this.logger.log(`openOrder started`, this.context)
-        // let order = await this.orderDalService.getActiveOrder();
+
         let order: OrderEntity = await this.ordersRepository.getActiveOrder();
         if (order) {
 
-            if (this.isOrderTimeoutPassed(order.orderTime)) {
-                this.logger.log(`deactivating old order, and open new one`, this.context)
-                // await this.orderDalService.deactivateOrderById(currOrderId);
+            if (this.orderUtils.isOrderTimeoutPassed(order.orderTime)) {
+                this.logger.log(`deactivating old order, and open new one`, this.context);
+
                 await this.ordersRepository.deactivateOrderById(order.id);
-                // const newOrderId = this.uuidService.generateUUID();
-                // await this.orderDalService.createNewOrder(newOrderId, userId);
                 const newOrder = await this.ordersRepository.createNewOrder(userId);
                 return newOrder.id;
             } else {
                 const message = 'there is an active order already.';
-                this.logger.log(message, this.context)
+
+                this.logger.log(message, this.context);
                 return Promise.reject(this.httpResponseService.buildErrorObj(message, HttpStatusCodeEnum.CONFLICT));
             }
         } else {
-            this.logger.log(`opening new order`, this.context)
-            // const newOrderId = this.uuidService.generateUUID();
-            // await this.orderDalService.createNewOrder(newOrderId, userId);
+            this.logger.log(`opening new order`, this.context);
             const newOrder = await this.ordersRepository.createNewOrder(userId);
             return newOrder.id;
         }
     }
 
-    // todo test
+    // done
     async updateUserResponse(body): Promise<any | HttpErrorObject> {
-        this.logger.log(`updateUserResponse started. userId: ${body.userId}`, this.context)
-        // let userResponse = await this.orderDalService.getUserResponse(body);
+        this.logger.log(`updateUserResponse started. userId: ${body.userId}`, this.context);
+
         let userResponse = await this.orderResponseRepository.getUserResponse(body);
         if (!userResponse) {
-            this.logger.log(`saving user response. userId: ${body.userId}`, this.context)
-            // return this.orderDalService.updateUserResponse(body);
+            this.logger.log(`saving user response. userId: ${body.userId}`, this.context);
             return this.orderResponseRepository.updateUserResponse(body);
         } else {
-            const message = `user responded already. userId: ${body.userId}`;
+            const message = `user responded already.`;
             this.logger.log(message, this.context)
             return Promise.reject(this.httpResponseService.buildErrorObj(message, HttpStatusCodeEnum.CONFLICT));
         }
     }
 
-    // todo test
+    // done
     getActiveOrderDetails(){
         this.logger.log(`getActiveOrderDetails started.`, this.context)
         try {
-            // return this.orderDalService.getActiveOrderDetails();
             return this.ordersRepository.getActiveOrderDetails();
         } catch (err){
             return Promise.reject(this.httpResponseService.buildErrorObj(err, HttpStatusCodeEnum.INTERNAL_SERVER_ERROR));
         }
-    }
-
-    private isOrderTimeoutPassed(orderTime: string) {
-        let time = new Date(orderTime);
-        let currTime = new Date(this.orderUtils.getCurrDate());
-        let timeDiff = currTime.getTime() - time.getTime();
-        let minuteDiff = timeDiff / 1000 / 60;
-        return minuteDiff > 3;
     }
 }
