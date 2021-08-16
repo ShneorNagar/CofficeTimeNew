@@ -14,7 +14,7 @@
             pButton pRipple
             type="button"
             class="p-button-raised p-button-text p-button-plain header-button">
-      <span id="redDot" [ngClass]="!!activeOrder ? 'show' : 'hide'"></span>
+      <span id="redDot" [ngClass]="isOrderActive ? 'show' : 'hide'"></span>
     </button>
 
     <button *ngIf="user"

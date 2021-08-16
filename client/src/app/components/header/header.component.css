@@ -1,6 +1,6 @@
 .header-container{
   height: 100%;
-  background-color: #00000059;
+  background-color: var(--main-background);
 
   display: flex;
   justify-content: space-between;

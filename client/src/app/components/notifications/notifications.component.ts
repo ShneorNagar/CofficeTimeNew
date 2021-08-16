@@ -46,14 +46,10 @@ export class NotificationsComponent implements OnChanges{
     })
   }
 
-
   ngOnChanges(changes: SimpleChanges): void {
-    const order = changes['order'];
-    if (order) {
-      this.order = order.currentValue.value
-      this.title = !!this.order ? `new order from ${this.order.username}` : 'no orders found'
-      this.isOrderActive = !!this.order;
-    }
+    this.order = changes.order?.currentValue?.value;
+    this.title = !!this.order ? `new order from ${this.order.username}` : 'no orders found';
+    this.isOrderActive = !!this.order;
   }
 
   accept() {

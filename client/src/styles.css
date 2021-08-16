@@ -1,4 +1,6 @@
 :root{
+  --main-background: #bebebe8f;
+
   --header-border: #800000 5px solid;
   --avatar-border: #800000 3px solid;
   --avatar-background: rgba(255, 213, 79, 0.27);

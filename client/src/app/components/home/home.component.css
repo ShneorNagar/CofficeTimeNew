@@ -9,6 +9,9 @@ body {
   align-content: center;
   justify-content: center;
   align-items: center;
+
+  background-image: url("src/assets/images/itemsBackround.jpg");
+  background-repeat: repeat;
 }
 
 .app-item{
@@ -103,27 +106,11 @@ body {
 .facts-container{
   position: absolute;
   bottom: 0;
-  right: 0;
+  left: 0;
   width: 35%;
   height: 30%;
   direction: rtl;
-  background-color: rgba(59, 54, 52, 0.21);
-}
-
-.facts-header{
-  position: absolute;
-  top: -20%;
-  font-size: 35px;
-  margin-right:3%;
-}
-
-.facts-header span{
-  color: white;
-}
-
-.facts-header img{
-  height: 35px;
-  width: 35px;
+  background-color: #3b3634a6;
 }
 
 .facts-text{
@@ -132,22 +119,22 @@ body {
 }
 
 .facts-title{
+  display: flex;
+  align-items: center;
   font-size: larger;
 }
 
-.facts-body{
-
-}
 /**Made with**/
 .made-with{
   position: absolute;
-  bottom: 2%;
+  bottom: 0;
   width: 100%;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: black;
+  background-color: #f4f5f6;
 }
 
 .made-with *{

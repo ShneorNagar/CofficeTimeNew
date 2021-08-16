@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit, OnChanges {
 
   user: any;
   showNotifications: boolean;
+  isOrderActive: boolean;
   @Input() activeOrder: ActiveOrder;
 
   constructor(private primengConfig: PrimeNGConfig,
@@ -44,7 +45,10 @@ export class HeaderComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.activeOrder?.currentValue?.value){
+      this.isOrderActive = true;
       this.toastService.displayInfoToast('there is a new order')
+    } else {
+      this.isOrderActive = false;
     }
   }
 
