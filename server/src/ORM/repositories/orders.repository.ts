@@ -2,7 +2,7 @@ import {Injectable} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
 import {OrderEntity} from "../entities/order.entity";
 import {Repository} from "typeorm";
-import {OrderUtils} from "../../components/order/order.utils";
+import {TimeUtils} from "../../utils/time.utils";
 import {UserEntity} from "../entities/user.entity";
 
 Injectable()
@@ -13,15 +13,13 @@ export class OrdersRepository {
 
     constructor(@InjectRepository(OrderEntity)
                 private readonly ordersRepository: Repository<OrderEntity>,
-                private orderUtils: OrderUtils) {
+                private orderUtils: TimeUtils) {
     }
 
-    // done
     async getActiveOrder(){
         return this.ordersRepository.findOne({where: {isOrderActive : this.ACTIVE_ORDER}})
     }
 
-    // done
     async deactivateOrderById(orderId: string){
         return this.ordersRepository
             .createQueryBuilder('order')
@@ -31,13 +29,11 @@ export class OrdersRepository {
             .execute();
     }
 
-    // done
     async createNewOrder(userId: string){
         const order = new OrderEntity(userId, 1, this.orderUtils.getCurrDate())
         return this.ordersRepository.save(order);
     }
 
-    // done
     async getActiveOrderDetails(){
         return this.ordersRepository
             .createQueryBuilder('order')

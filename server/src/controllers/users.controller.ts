@@ -1,7 +1,7 @@
 import {Body, Controller, Get, Logger, Post, Put, Req} from "@nestjs/common";
 import {HttpResponse} from "../shared/user-dto";
-import {HttpResponseService} from "../services/http/http-response.service";
-import {HttpStatusCodeEnum} from "../services/http/http-status-code.enum";
+import {HttpResponseService} from "../utils/http-response.service";
+import {HttpStatusCodeEnum} from "../consts/http-status-code.enum";
 import {UserRepository} from "../ORM/repositories/user.repository";
 
 
@@ -15,8 +15,6 @@ export class UsersController {
     private context = UsersController.name;
     private logger = new Logger(this.context);
 
-    // done
-    // todo use type definition
     @Post('login')
     async getUserByNameAndPassword(@Body() user: any): Promise<HttpResponse> {
         try {
@@ -36,7 +34,6 @@ export class UsersController {
         }
     }
 
-    // done
     @Post('register')
     async register(@Body() body: any) {
         try {
@@ -57,7 +54,6 @@ export class UsersController {
         }
     }
 
-    // done
     @Put('update')
     async update(@Body() body: any): Promise<any>{
         try {
@@ -71,7 +67,6 @@ export class UsersController {
         }
     }
 
-    // done
     /**
      *
      * @param req

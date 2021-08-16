@@ -1,10 +1,7 @@
 import {Module} from '@nestjs/common';
-import {UsersDalService} from "./components/users/users-dal.service";
-import {PushDalService} from "./components/push/push-dal.service";
-import {PushService} from "./components/push/push.service";
-import {Sqlite} from "../public/DB/db";
+import {PushService} from "./services/push.service";
 import {WebSocketPlasma} from "./web-socket/event-gateway.app";
-import {StatsService} from "./components/stats/stats.service";
+import {StatsService} from "./services/stats.service";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {OrmModule} from "./ORM/orm.module";
 
@@ -21,10 +18,8 @@ import {OrmModule} from "./ORM/orm.module";
         OrmModule,
     ],
     controllers: [],
-    providers: [UsersDalService,
-        PushDalService,
+    providers: [
         PushService,
-        Sqlite,
         WebSocketPlasma,
         StatsService],
 })

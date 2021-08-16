@@ -1,12 +1,10 @@
 import * as webpush from 'web-push'
 import {Injectable, Logger, OnModuleInit} from "@nestjs/common";
-import {PushDalService} from "./push-dal.service";
-import {SubscriptionRepository} from "../../ORM/repositories/subscription.repository";
+import {SubscriptionRepository} from "../ORM/repositories/subscription.repository";
 
 @Injectable()
 export class PushService implements OnModuleInit {
 
-    // private pushDalService: PushDalService
     constructor(private subscriptionRepository: SubscriptionRepository) {
     }
 
@@ -19,9 +17,7 @@ export class PushService implements OnModuleInit {
         privateKey: "GDyGEozxx77wthpemL7udsgGx1QLMMsv-VYTFujO05w"
     }
 
-    // todo test
     async notifyUsers(username, userId, orderId) {
-            // const groupSubscriptions = await this.pushDalService.getGroupSubscriptions(userId);
             const groupSubscriptions = await this.subscriptionRepository.getGroupSubscriptions(userId);
             return this.sendPush(username, orderId, groupSubscriptions);
     }

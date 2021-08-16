@@ -1,7 +1,7 @@
 import {Injectable, Logger} from "@nestjs/common";
-import {HttpStatusCodeEnum} from "../../services/http/http-status-code.enum";
-import {HttpResponseService} from "../../services/http/http-response.service";
-import {StatsRepository} from "../../ORM/repositories/stats.repository";
+import {HttpStatusCodeEnum} from "../consts/http-status-code.enum";
+import {HttpResponseService} from "../utils/http-response.service";
+import {StatsRepository} from "../ORM/repositories/stats.repository";
 
 @Injectable()
 export class StatsService {
@@ -21,7 +21,6 @@ export class StatsService {
         return objectsArray;
     }
 
-    // done
     async getUserData(userId: string) {
         try {
             const ordersCalls = this.buildArrayFromDBObject(await this.statsRepository.getUserOrderCalls(userId));

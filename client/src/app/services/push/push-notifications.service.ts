@@ -9,6 +9,8 @@ import {ActivatedRoute, Router} from "@angular/router";
 })
 export class PushNotificationsService {
 
+  confirmRef: ConfirmationService;
+
   constructor(private swPush: SwPush,
               private subscriptionService: SubscriptionService,
               private confirmationService: ConfirmationService,
@@ -30,10 +32,11 @@ export class PushNotificationsService {
     }).then(sub => {
       console.log('sending subscription')
       this.subscriptionService.sendSubscriptionToServer(sub);
+      this.confirmRef.close();
     })
       .catch(err => {
         console.error("Could not subscribe to notifications", err);
-        this.confirmationService.confirm({
+        this.confirmRef = this.confirmationService.confirm({
           message: `you have to enable push notifications in order to get cofficeTime orders notifications`,
           header: 'Warning',
           icon: 'pi pi-exclamation-triangle',

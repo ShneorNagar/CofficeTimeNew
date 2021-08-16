@@ -1,5 +1,5 @@
 import {Controller, Get, Req} from "@nestjs/common";
-import {StatsService} from "../components/stats/stats.service";
+import {StatsService} from "../services/stats.service";
 
 @Controller('chart')
 export class StatsController{

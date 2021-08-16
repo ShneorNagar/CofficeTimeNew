@@ -11,7 +11,7 @@ export class SubscriptionRepository {
     }
 
     async getUserSubscription(userId: string) {
-        return this.subscriptionRepository.find({where: {userId}});
+        return this.subscriptionRepository.findOne({where: {userId}});
     }
 
     async insertNewSubscription(subscription: any, userId: string) {
@@ -21,7 +21,7 @@ export class SubscriptionRepository {
             .insert()
             .into(SubscriptionEntity)
             .values([
-                {subscription: subscriptionStr, userId}
+                {subscription: subscriptionStr, userId: userId}
             ])
             .execute();
     }

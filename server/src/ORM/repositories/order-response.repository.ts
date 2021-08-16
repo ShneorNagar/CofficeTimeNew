@@ -2,14 +2,14 @@ import {Injectable} from "@nestjs/common";
 import {InjectRepository} from "@nestjs/typeorm";
 import {OrderResponseEntity} from "../entities/order-response.entity";
 import {Repository} from "typeorm";
-import {OrderUtils} from "../../components/order/order.utils";
+import {TimeUtils} from "../../utils/time.utils";
 
 @Injectable()
 export class OrderResponseRepository {
 
     constructor(@InjectRepository(OrderResponseEntity)
                 private readonly orderResponseRepo: Repository<OrderResponseEntity>,
-                private orderUtils: OrderUtils) {
+                private orderUtils: TimeUtils) {
     }
 
     async updateUserResponse(body: any){
@@ -30,7 +30,6 @@ export class OrderResponseRepository {
             .execute();
     }
 
-    // todo test
     async getUserResponse(body: any){
         let userId = body.userId;
         let ownerOrderId = body.orderId;

@@ -12,7 +12,6 @@ export class StatsRepository {
                 private readonly userRepository: Repository<UserEntity>) {
     }
 
-    // done
     async getUserOrderCalls(id: string){
         return this.userRepository
             .createQueryBuilder('user')
@@ -23,7 +22,6 @@ export class StatsRepository {
             .getRawMany()
     }
 
-    // done
     async getOrderAccepts(id: string){
         return this.userRepository
             .createQueryBuilder('user')

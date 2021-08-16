@@ -1,11 +1,11 @@
 import {Body, Controller, Get, Logger, Post} from "@nestjs/common";
-import {OrderService} from "../components/order/order.service";
-import {PushService} from "../components/push/push.service";
-import {HttpResponseService} from "../services/http/http-response.service";
-import {HttpStatusCodeEnum} from "../services/http/http-status-code.enum";
+import {OrderService} from "../services/order.service";
+import {PushService} from "../services/push.service";
+import {HttpResponseService} from "../utils/http-response.service";
+import {HttpStatusCodeEnum} from "../consts/http-status-code.enum";
 import {EVENT_TYPE, WebSocketPlasma} from "../web-socket/event-gateway.app";
 import {UserDTO} from "../shared/user-dto";
-import {OrderUtils} from "../components/order/order.utils";
+import {TimeUtils} from "../utils/time.utils";
 
 @Controller('orders')
 export class OrderController {
@@ -14,13 +14,12 @@ export class OrderController {
                 private orderService: OrderService,
                 private httpResponseService: HttpResponseService,
                 private webSocketPlasmaService: WebSocketPlasma,
-                private orderUtils: OrderUtils) {
+                private orderUtils: TimeUtils) {
     }
 
     private context = OrderController.name;
     private logger = new Logger(this.context);
 
-    // done
     @Post('newOrder')
     async podcastForNewOrder(@Body() user: UserDTO) {
         this.logger.log(`podcastForNewOrder started`, this.context);
@@ -55,7 +54,6 @@ export class OrderController {
         }
     }
 
-    // done
     @Get('activeOrderDetails')
     async getActiveOrder(){
         this.logger.log(`getActiveOrder started`, this.context);

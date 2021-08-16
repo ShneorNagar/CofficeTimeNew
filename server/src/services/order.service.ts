@@ -1,15 +1,15 @@
 import {Injectable, Logger} from "@nestjs/common";
-import {OrderUtils} from "./order.utils";
-import {HttpErrorObject, HttpResponseService} from "../../services/http/http-response.service";
-import {HttpStatusCodeEnum} from "../../services/http/http-status-code.enum";
-import {OrdersRepository} from "../../ORM/repositories/orders.repository";
-import {OrderResponseRepository} from "../../ORM/repositories/order-response.repository";
-import {OrderEntity} from "../../ORM/entities/order.entity";
+import {TimeUtils} from "../utils/time.utils";
+import {HttpErrorObject, HttpResponseService} from "../utils/http-response.service";
+import {HttpStatusCodeEnum} from "../consts/http-status-code.enum";
+import {OrdersRepository} from "../ORM/repositories/orders.repository";
+import {OrderResponseRepository} from "../ORM/repositories/order-response.repository";
+import {OrderEntity} from "../ORM/entities/order.entity";
 
 @Injectable()
 export class OrderService {
 
-    constructor(private orderUtils: OrderUtils,
+    constructor(private orderUtils: TimeUtils,
                 private httpResponseService: HttpResponseService,
                 private ordersRepository: OrdersRepository,
                 private orderResponseRepository: OrderResponseRepository) {
@@ -18,7 +18,6 @@ export class OrderService {
     private context = OrderService.name;
     private logger = new Logger(this.context);
 
-    // done
     async openOrder(userId: string): Promise<any | HttpErrorObject> {
         this.logger.log(`openOrder started`, this.context)
 
@@ -44,7 +43,6 @@ export class OrderService {
         }
     }
 
-    // done
     async updateUserResponse(body): Promise<any | HttpErrorObject> {
         this.logger.log(`updateUserResponse started. userId: ${body.userId}`, this.context);
 
@@ -59,7 +57,6 @@ export class OrderService {
         }
     }
 
-    // done
     getActiveOrderDetails(){
         this.logger.log(`getActiveOrderDetails started.`, this.context)
         try {

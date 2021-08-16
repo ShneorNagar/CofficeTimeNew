@@ -1,7 +1,7 @@
 import {Injectable, Scope} from "@nestjs/common";
 
 @Injectable({scope: Scope.DEFAULT})
-export class OrderUtils{
+export class TimeUtils {
 
     /**
      * for now we are support for one active order only
