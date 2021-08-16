@@ -1,20 +1,20 @@
 import {Body, Controller, Get, Logger, Post} from "@nestjs/common";
-import {OrderService} from "./order.service";
-import {PushDalService} from "../push/push-dal.service";
-import {PushService} from "../push/push.service";
-import {HttpResponseService} from "../../services/http/http-response.service";
-import {HttpStatusCodeEnum} from "../../services/http/http-status-code.enum";
-import {EVENT_TYPE, WebSocketPlasma} from "../../web-socket/event-gateway.app";
-import {UserDTO} from "../../shared/user-entity";
+import {OrderService} from "../services/order.service";
+import {PushService} from "../services/push.service";
+import {HttpResponseService} from "../utils/http-response.service";
+import {HttpStatusCodeEnum} from "../consts/http-status-code.enum";
+import {EVENT_TYPE, WebSocketPlasma} from "../web-socket/event-gateway.app";
+import {UserDTO} from "../shared/user-dto";
+import {TimeUtils} from "../utils/time.utils";
 
 @Controller('orders')
 export class OrderController {
 
-    constructor(private pushDalService: PushDalService,
-                private pushService: PushService,
+    constructor(private pushService: PushService,
                 private orderService: OrderService,
                 private httpResponseService: HttpResponseService,
-                private webSocketPlasmaService: WebSocketPlasma) {
+                private webSocketPlasmaService: WebSocketPlasma,
+                private orderUtils: TimeUtils) {
     }
 
     private context = OrderController.name;
@@ -23,14 +23,14 @@ export class OrderController {
     @Post('newOrder')
     async podcastForNewOrder(@Body() user: UserDTO) {
         this.logger.log(`podcastForNewOrder started`, this.context);
-
         let responseMessage;
+
         try {
-            let newOrderId = await this.orderService.openOrder(user.userId)
-            await this.pushService.notifyUsers(user.username, user.userId, newOrderId);
+            let newOrderId = await this.orderService.openOrder(user.id)
+            await this.pushService.notifyUsers(user.username, user.id, newOrderId);
 
             responseMessage = 'push notification sent successfully';
-            this.logger.log(`push notification sent successfully`)
+            this.logger.log(responseMessage)
             return this.httpResponseService.buildResponse(responseMessage, HttpStatusCodeEnum.OK);
         } catch (err) {
             this.logger.error(err, this.context);
@@ -59,7 +59,7 @@ export class OrderController {
         this.logger.log(`getActiveOrder started`, this.context);
         try {
             const activeOrder = await this.orderService.getActiveOrderDetails();
-            if (activeOrder){
+            if (activeOrder && !this.orderUtils.isOrderTimeoutPassed(activeOrder.orderTime)){
                 const message = 'active order details fetched.'
                 this.logger.log(message, this.context);
                 return this.httpResponseService.buildResponse(message, HttpStatusCodeEnum.OK, activeOrder);

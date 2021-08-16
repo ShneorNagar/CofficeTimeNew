@@ -78,12 +78,17 @@ export class UserEditComponent implements OnInit {
   }
 
   private buildSubmitValue(value) {
-    if (!value.user) {
+    if (!value.user && this.localUserService.isUserLoggedIn()) {
       return {
-        user: {...this.localUserService.getUser().user},
+        username: this.localUserService.getUser().username,
+        id: this.localUserService.getUser().id,
         ...value
       }
     }
-    return value;
+    return {
+      username: value.user?.username,
+      password: value.user?.password,
+      preferences: value.preferences
+    };
   }
 }

@@ -1,8 +1,8 @@
 import {Controller, Get, Logger} from "@nestjs/common";
-import {FileSystemReader} from "../services/file-system.reader";
+import {FileSystemReader} from "../utils/file-system.reader";
 import * as fs from 'fs';
-import {HttpResponse} from "../shared/user-entity";
-import {HttpStatusCodeEnum} from "../services/http/http-status-code.enum";
+import {HttpResponse} from "../shared/user-dto";
+import {HttpStatusCodeEnum} from "../consts/http-status-code.enum";
 
 @Controller('config')
 export class ConfigController {

@@ -29,7 +29,7 @@ export class ChartComponent implements OnInit{
       this.charts = this.chartService.getCharts();
     });
 
-    this.configService.loadAllUsers(this.localUserService.getUser().user.userId)
+    this.configService.loadAllUsers(this.localUserService.getUser().id)
       .then(res => {
         this.users = res.value;
 
@@ -41,8 +41,8 @@ export class ChartComponent implements OnInit{
 
   addChartData() {
     const user = this.users.find(user => user.username === this.selectedUser);
-    this.chartService.updateChartsByUserId(user.user_id).then((charts: ChartData[]) => {
-      if (charts.length > 0) this.charts = charts
+    this.chartService.updateChartsByUserId(user.id).then((charts: ChartData[]) => {
+      if (charts && charts.length > 0) this.charts = charts
     });
   }
 }

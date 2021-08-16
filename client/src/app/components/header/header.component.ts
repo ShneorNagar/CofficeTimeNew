@@ -43,7 +43,7 @@ export class HeaderComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.activeOrder.currentValue){
+    if (changes.activeOrder?.currentValue?.value){
       this.toastService.displayInfoToast('there is a new order')
     }
   }

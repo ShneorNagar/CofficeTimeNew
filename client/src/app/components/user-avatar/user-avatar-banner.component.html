@@ -1,6 +1,6 @@
 <button class="avatar-container"
         type="button" pButton
-        [pTooltip]="user.user.username"
+        [pTooltip]="user?.username"
         tooltipPosition="left"
         (click)="toggle($event)">
   <img class="user-avatar-img" alt="avatar" [src]="avatar">

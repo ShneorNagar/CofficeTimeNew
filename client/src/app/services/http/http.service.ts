@@ -1,6 +1,5 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {DialogService} from "primeng/dynamicdialog";
 import {HttpResponse} from "./http-response";
 import {HttpStatusCodeEnum} from "./http-status-code.enum";
 import {ToastService} from "../toast.service";
@@ -22,6 +21,11 @@ export class HttpService {
   sendPostRequest(path: string, body: any, options?: {headers: HttpHeaders}): Promise<HttpResponse> {
     const postHeaders = options ?? this.httpOptions;
     return this.http.post<HttpResponse>(`${this.SERVER_URL}${path}`, body, postHeaders).toPromise();
+  }
+
+  sendPutRequest(path: string, body: any, options?: {headers: HttpHeaders}): Promise<HttpResponse> {
+    const postHeaders = options ?? this.httpOptions;
+    return this.http.put<HttpResponse>(`${this.SERVER_URL}${path}`, body, postHeaders).toPromise();
   }
 
   stringifyResponseMessage(message){

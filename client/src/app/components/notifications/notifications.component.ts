@@ -50,20 +50,20 @@ export class NotificationsComponent implements OnChanges{
   ngOnChanges(changes: SimpleChanges): void {
     const order = changes['order'];
     if (order) {
-      this.order = order.currentValue
+      this.order = order.currentValue.value
       this.title = !!this.order ? `new order from ${this.order.username}` : 'no orders found'
       this.isOrderActive = !!this.order;
     }
   }
 
   accept() {
-    let reqBody = this.buildReqBody(UserResponseEnum.ACCEPT, this.order.order_id);
+    let reqBody = this.buildReqBody(UserResponseEnum.ACCEPT, this.order.id);
     this.sendRequest(reqBody);
     this.responseSent.emit();
   }
 
   decline() {
-    let reqBody = this.buildReqBody(UserResponseEnum.DECLINE, this.order.order_id);
+    let reqBody = this.buildReqBody(UserResponseEnum.DECLINE, this.order.id);
     this.sendRequest(reqBody);
     this.responseSent.emit();
   }
@@ -79,7 +79,7 @@ export class NotificationsComponent implements OnChanges{
   }
   private buildReqBody(value: UserResponseEnum, orderId: string) {
     return {
-      userId: this.userEntity.user.userId,
+      userId: this.userEntity.id,
       value,
       orderId
     }

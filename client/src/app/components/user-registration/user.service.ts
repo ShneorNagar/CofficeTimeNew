@@ -29,30 +29,41 @@ export class UserService {
   public sendReqToServer(state: UserState, data: any) {
     switch (state) {
       case UserState.LOG_IN: {
-        this.sendRequest(routs.LOG_IN.valueOf(), data.user);
+        this.sendPostRequest(routs.LOG_IN.valueOf(), data);
         break;
       }
       case UserState.LOG_OUT: {
-        this.sendRequest(routs.LOG_OUT.valueOf(), data);
+        this.sendPostRequest(routs.LOG_OUT.valueOf(), data);
         break;
       }
       case UserState.REGISTER: {
-        this.sendRequest(routs.REGISTER.valueOf(), data);
+        this.sendPostRequest(routs.REGISTER.valueOf(), data);
         break;
       }
       case UserState.PREFERENCES:{
-        this.sendRequest(routs.UPDATE.valueOf(), data);
+        this.sendPutRequest(routs.UPDATE.valueOf(), data);
         break;
       }
       case UserState.REACTION: {
-        this.sendRequest(routs.REACTION.valueOf(), data);
+        this.sendPostRequest(routs.REACTION.valueOf(), data);
         break;
       }
     }
   }
 
-  private sendRequest(path: string, data: any) {
+  private sendPostRequest(path: string, data: any) {
     this.httpService.sendPostRequest(`users/${path}`, data)
+      .then(response => {
+      this.handleResponse(response);
+      })
+      .catch(err => {
+        this.toastService.displayErrorToast('error printed to console')
+        console.error(err);
+      })
+  }
+
+  private sendPutRequest(path: string, data: any) {
+    this.httpService.sendPutRequest(`users/${path}`, data)
       .then(response => {
       this.handleResponse(response);
       })

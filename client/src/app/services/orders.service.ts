@@ -18,7 +18,11 @@ export class OrdersService {
     if (this.localUserService.isUserLoggedIn()) {
       let response: HttpResponse | any;
       try {
-        response = await this.httpService.sendPostRequest('orders/newOrder', this.localUserService.getUser().user);
+        const body = {
+          username: this.localUserService.getUser().username,
+          id: this.localUserService.getUser().id
+        }
+        response = await this.httpService.sendPostRequest('orders/newOrder', body);
         this.httpService.displayToastByResponse(response);
         return response;
       } catch (err) {

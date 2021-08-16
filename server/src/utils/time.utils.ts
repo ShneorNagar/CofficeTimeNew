@@ -1,7 +1,7 @@
 import {Injectable, Scope} from "@nestjs/common";
 
 @Injectable({scope: Scope.DEFAULT})
-export class OrderUtils{
+export class TimeUtils {
 
     /**
      * for now we are support for one active order only
@@ -18,5 +18,13 @@ export class OrderUtils{
         const seconds = currDate.getSeconds();
 
         return `${hour}:${minute}:${seconds} ${month}/${day}/${year}`
+    }
+
+    public isOrderTimeoutPassed(orderTime: string) {
+        let time = new Date(orderTime);
+        let currTime = new Date(this.getCurrDate());
+        let timeDiff = currTime.getTime() - time.getTime();
+        let minuteDiff = timeDiff / 1000 / 60;
+        return minuteDiff > 3;
     }
 }

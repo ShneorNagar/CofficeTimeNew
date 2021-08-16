@@ -1,11 +1,11 @@
 import * as webpush from 'web-push'
 import {Injectable, Logger, OnModuleInit} from "@nestjs/common";
-import {PushDalService} from "./push-dal.service";
+import {SubscriptionRepository} from "../ORM/repositories/subscription.repository";
 
 @Injectable()
 export class PushService implements OnModuleInit {
 
-    constructor(private pushDalService: PushDalService) {
+    constructor(private subscriptionRepository: SubscriptionRepository) {
     }
 
     private context = PushService.name;
@@ -18,7 +18,7 @@ export class PushService implements OnModuleInit {
     }
 
     async notifyUsers(username, userId, orderId) {
-            const groupSubscriptions = await this.pushDalService.getGroupSubscriptions(userId);
+            const groupSubscriptions = await this.subscriptionRepository.getGroupSubscriptions(userId);
             return this.sendPush(username, orderId, groupSubscriptions);
     }
 
@@ -43,7 +43,7 @@ export class PushService implements OnModuleInit {
                     "orderId": orderId
                 },
                 "actions": [{
-                    "action": "Answer",
+                    "action": "Open",
                     "title": "Go to CofficeTime"
                 }]
             }

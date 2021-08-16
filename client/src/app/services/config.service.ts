@@ -9,9 +9,9 @@ export interface Avatars {
 }
 
 export interface ActiveOrder{
-  order_id: string;
-  order_time: string;
-  caller_id: string;
+  id: string;
+  orderTime: string;
+  callerId: string;
   username: string;
 }
 
@@ -29,23 +29,11 @@ export class ConfigService {
   }
 
   async loadAllUsers(userId){
-    return await this.httpService.sendGetRequest('users/allUsers',{userId});
+    return await this.httpService.sendGetRequest('users/all',{userId});
   }
 
-  async loadAvatars() {
-    this.AVATARS = await this.getAvatars();
-  }
-
-  async loadActiveOrder(): Promise<ActiveOrder | null>{
-    try {
-      const res = await this.getActiveOrder();
-      const order: ActiveOrder = res['value'];
-      const isOrderTimeOut = ConfigService.calculateOrderTimeOut(order);
-      return isOrderTimeOut ? null : order;
-    } catch (err){
-      console.error(`error while getting active order.`)
-      console.error(err);
-    }
+  getActiveOrder(): Promise<HttpResponse>{
+    return this.httpService.sendGetRequest('orders/activeOrderDetails');
   }
 
   private async getAvatars(): Promise<Avatars> {
@@ -60,15 +48,7 @@ export class ConfigService {
     }
   }
 
-  private async getActiveOrder(): Promise<HttpResponse>{
-    return this.httpService.sendGetRequest('orders/activeOrderDetails');
-  }
-
-  private static calculateOrderTimeOut(order){
-    let orderTime = new Date(order['order_time']);
-    let currTime = new Date(DateGeneratorUtils.getCurrDate());
-    let timeDiff = currTime.getTime() - orderTime.getTime();
-    let minuteDiff = timeDiff / 1000 / 60;
-    return minuteDiff > 3;
+  async loadAvatars() {
+    this.AVATARS = await this.getAvatars();
   }
 }
